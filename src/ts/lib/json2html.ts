@@ -9,20 +9,27 @@ function render(parsedJSON: any){
             let renderedNested = render(nestedObject);
 
             let nestedElement = document.createElement('div');
-            let nestedElementParentKey = document.createElement('span');
+            let parentPropertyName = document.createElement('span');
             let typeSignature = document.createElement('span');
 
-            nestedElementParentKey.textContent = key + ":";
+            parentPropertyName.textContent = key + ":";
             typeSignature.textContent = parsedJSON[key].constructor.name;
 
-            nestedElement.appendChild(nestedElementParentKey);
             nestedElement.appendChild(typeSignature);
+            nestedElement.appendChild(parentPropertyName);
             nestedElement.appendChild(renderedNested);
             
             siblings.push(nestedElement);
         } else {
             let element = document.createElement('div');
-            element.innerHTML = key + ": " + parsedJSON[key];
+            let propertyName = document.createElement('span');
+            let value = document.createElement('span');
+
+            propertyName.textContent = key + ": ";
+            value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
+
+            element.appendChild(propertyName);
+            element.appendChild(value);
 
             siblings.push(element);
         }
