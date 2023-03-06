@@ -3,7 +3,7 @@ import { json2html } from './lib/json2html';
 
 
 function init(){
-    let defaultJSONString = '{"userName": "Alex", "age": 32, "bornDate": "5-10-1985", "banned": false, "registrationData": {"date": "2-11-2011",  "IP": "8.8.8.8"}}';
+    let defaultJSONString = '{ "userName": "Alex", "age": 32, "bornDate": "5-10-1985", "banned": false, "registrationData": {"date": "2-11-2011",  "IP": "8.8.8.8"}, "deletionDate": "null", "userTag": "undefined", "groups": [{"type": "public", "name": "managers"}, {"type":"private", "name": "admins"}] }';
 
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
