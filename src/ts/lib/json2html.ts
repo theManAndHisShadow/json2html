@@ -34,9 +34,18 @@ function render(parsedJSON: any){
             propertyName.textContent = key + ": ";
             propertyName.classList.add('json2html-key');
 
-            value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
+            let valueTypeCSSClassName;
+            if(parsedJSON[key] == "null") {
+                valueTypeCSSClassName = 'json2html-type__null';
+                value.textContent = parsedJSON[key]; 
+            } else if (parsedJSON[key] == "undefined") {
+                valueTypeCSSClassName = 'json2html-type__undefined';
+                value.textContent = parsedJSON[key]; 
+            } else {
+                valueTypeCSSClassName = 'json2html-type__' + typeof parsedJSON[key];
+                value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
+            }
 
-            let valueTypeCSSClassName = 'json2html-type__' + typeof parsedJSON[key];
             value.classList.add('json2html-value');
             value.classList.add(valueTypeCSSClassName);
 
