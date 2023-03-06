@@ -28,6 +28,9 @@ function render(parsedJSON: any){
             propertyName.textContent = key + ": ";
             value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
 
+            let valueTypeCSSClassName = 'json2html__type-' + typeof parsedJSON[key];
+            value.classList.add(valueTypeCSSClassName);
+
             element.appendChild(propertyName);
             element.appendChild(value);
 
