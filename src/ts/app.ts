@@ -3,7 +3,7 @@ import { json2html } from './lib/json2html';
 
 
 function init(){
-    let defaultJSONString = '{"foo": 42}';
+    let defaultJSONString = '{ "userId": 1, "id": 1, "title": "delectus aut autem", "completed": false }';
 
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
