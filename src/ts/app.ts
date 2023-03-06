@@ -1,5 +1,31 @@
 import { json2html } from './lib/json2html';
 
-let formatted = json2html();
 
-console.log(formatted);
+
+function init(){
+    let defaultJSONString = '{"foo": 42}';
+
+    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    textArea.textContent = defaultJSONString;
+
+    updateOutput(json2html(defaultJSONString));
+
+    // update formatted JSON on textarea changing
+    textArea.addEventListener('keyup', (event) => {
+        updateOutput(json2html(textArea.value));
+    });
+}
+
+
+
+function updateOutput(newOutput: HTMLDivElement){
+    let output = document.querySelector('#app__output');
+
+    output.children.length == 0 
+        ? output.appendChild(newOutput) 
+        : output.replaceChild(newOutput, output.firstElementChild);
+}
+
+
+
+init();

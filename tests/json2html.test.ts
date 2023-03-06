@@ -4,7 +4,8 @@
 
 import { json2html } from '../src/ts/lib/json2html';
 
-let formatted = json2html();
+let json = '{"foo": 42}';
+let formatted = json2html(json);
 
 describe('', () => {
     test('', () => {
