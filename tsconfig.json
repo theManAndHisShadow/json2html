@@ -1,0 +1,10 @@
+{
+    "files": [
+        "src/ts/lib/json2html.ts",
+        "src/ts/app.ts",
+    ],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es5"
+    }
+}
