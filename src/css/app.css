@@ -10,7 +10,7 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #2c2d34;
+    background: #ffffff;
 }
 
 
@@ -19,7 +19,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50.1%, -50.4%);
-    background: #e3e3e3;
+    background: #ffffff;
     margin: 5px 0px;
     padding: 10px 15px;
     border-radius: 5px;
@@ -32,14 +32,15 @@
 }
 
 #app__input textarea, #app__output {
-    width: 200px;
+    width: 210px;
     background: white;
-    min-height: 90px;
-    border: 1px solid #4e4e4e;
-    border-radius: 4px;
+    min-height: 226px;
+    border: none;
     padding: 5px;
 }
 
 #app__output {
     margin-left: 5px;
+    border-left: 1px solid #bababa;
+    padding-left: 18px;
 }
