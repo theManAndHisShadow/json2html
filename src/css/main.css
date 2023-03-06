@@ -1,45 +1,20 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
+.json2html__pair {
+    font-family: monospace;
 }
 
-#app {
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: #2c2d34;
+.json2html__key {
+    color: blue;
 }
 
-
-#app__main-block {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50.1%, -50.4%);
-    background: #e3e3e3;
-    margin: 5px 0px;
-    padding: 10px 15px;
-    border-radius: 5px;
+.json2html__type-boolean {
+    color: blueviolet;
 }
-
-
-#app__input, #app__output {
-    position: relative;
-    float: left;
+.json2html__type-number {
+    color: #1e7fcc;
 }
-
-#app__input textarea, #app__output {
-    width: 200px;
-    background: white;
-    min-height: 90px;
-    border: 1px solid #4e4e4e;
-    border-radius: 4px;
-    padding: 5px;
+.json2html__type-string {
+    color: #4caf50;
 }
-
-#app__output {
-    margin-left: 5px;
-}
+.json2html__type-null {}
+.json2html__type-undefined {}
+.json2html__type-symbol {}
