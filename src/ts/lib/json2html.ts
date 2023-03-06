@@ -12,11 +12,15 @@ function render(parsedJSON: any){
             let parentPropertyName = document.createElement('span');
             let typeSignature = document.createElement('span');
 
-            parentPropertyName.textContent = key + ":";
+            nestedElement.classList.add('json2html__nestedObject');
+            parentPropertyName.textContent = key + ": ";
+            parentPropertyName.classList.add('json2html__key');
             typeSignature.textContent = parsedJSON[key].constructor.name;
+            typeSignature.classList.add('json2html__type-object');
+            
 
-            nestedElement.appendChild(typeSignature);
             nestedElement.appendChild(parentPropertyName);
+            nestedElement.appendChild(typeSignature);
             nestedElement.appendChild(renderedNested);
             
             siblings.push(nestedElement);
@@ -25,7 +29,11 @@ function render(parsedJSON: any){
             let propertyName = document.createElement('span');
             let value = document.createElement('span');
 
+            element.classList.add('json2html__pair');
+
             propertyName.textContent = key + ": ";
+            propertyName.classList.add('json2html__key');
+
             value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
 
             let valueTypeCSSClassName = 'json2html__type-' + typeof parsedJSON[key];
