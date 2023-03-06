@@ -1,20 +1,35 @@
-.json2html__pair {
+.json2html-pair  > *, 
+.json2html-nestedObject > * {
     font-family: monospace;
+    font-size: 14px;
 }
 
-.json2html__key {
+.json2html-nestedObject div{
+    margin-left: 15px;
+    margin-top: 2px;
+}
+
+.json2html-key {
     color: blue;
 }
 
-.json2html__type-boolean {
+.json2html-value {
+    margin-left: -7px;
+}
+
+.json2html-type__boolean {
     color: blueviolet;
 }
-.json2html__type-number {
+.json2html-type__number {
     color: #1e7fcc;
 }
-.json2html__type-string {
+.json2html-type__string {
     color: #4caf50;
 }
-.json2html__type-null {}
-.json2html__type-undefined {}
-.json2html__type-symbol {}
+.json2html-type__null {}
+.json2html-type__undefined {}
+.json2html-type__symbol {}
+
+.json2html-type__object{
+    font-style: italic;
+}
