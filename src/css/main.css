@@ -32,9 +32,9 @@
 }
 
 #app__input textarea, #app__output {
-    width: 100px;
+    width: 200px;
     background: white;
-    min-height: 70px;
+    min-height: 90px;
     border: 1px solid #4e4e4e;
     border-radius: 4px;
     padding: 5px;
