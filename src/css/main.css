@@ -24,3 +24,22 @@
     padding: 10px 15px;
     border-radius: 5px;
 }
+
+
+#app__input, #app__output {
+    position: relative;
+    float: left;
+}
+
+#app__input textarea, #app__output {
+    width: 100px;
+    background: white;
+    min-height: 70px;
+    border: 1px solid #4e4e4e;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+#app__output {
+    margin-left: 5px;
+}
