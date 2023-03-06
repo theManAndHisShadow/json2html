@@ -1,6 +1,12 @@
-.json2html__type-boolean {}
-.json2html__type-number {}
-.json2html__type-string {}
+.json2html__type-boolean {
+    color: blueviolet;
+}
+.json2html__type-number {
+    color: #1e7fcc;
+}
+.json2html__type-string {
+    color: #4caf50;
+}
 .json2html__type-null {}
 .json2html__type-undefined {}
 .json2html__type-symbol {}
