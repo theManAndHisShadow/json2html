@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+#app {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+}
+
+
+#app__main-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50.1%, -50.4%);
+    background: #ffffff;
+    margin: 5px 0px;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+
+#app__input, #app__output {
+    position: relative;
+    float: left;
+}
+
+#app__input textarea, #app__output {
+    width: 210px;
+    background: white;
+    min-height: 226px;
+    border: none;
+    padding: 5px;
+}
+
+#app__output {
+    margin-left: 5px;
+    border-left: 1px solid #bababa;
+    padding-left: 18px;
+}

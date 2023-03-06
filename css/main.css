@@ -1,0 +1,39 @@
+.json2html-pair  > *, 
+.json2html-nestedObject > * {
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.json2html-nestedObject div{
+    margin-left: 15px;
+    margin-top: 2px;
+}
+
+.json2html-key {
+    color: blue;
+}
+
+.json2html-value {
+    margin-left: -7px;
+}
+
+.json2html-type__boolean {
+    color: blueviolet;
+}
+.json2html-type__number {
+    color: #1e7fcc;
+}
+.json2html-type__string {
+    color: #4caf50;
+}
+.json2html-type__null {
+    color: #c2c2c2;
+}
+.json2html-type__undefined {
+    color: #795548;
+}
+.json2html-type__symbol {}
+
+.json2html-type__object{
+    font-style: italic;
+}
