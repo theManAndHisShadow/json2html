@@ -35,15 +35,15 @@ function wrapValue(value: any){
  * @returns ready for other manipulations HTML Node.
  */
 function renderPrimitiveItem(keyName: string, itemValue: any){
+    
     let element = document.createElement('div');
-    let propertyName = document.createElement('span');
-    let value = document.createElement('span');
-
     element.classList.add('json2html-pair');
-
+    
+    let propertyName = document.createElement('span');
     propertyName.textContent = keyName + ": ";
     propertyName.classList.add('json2html-key');
-
+    
+    let value = document.createElement('span');
     value.textContent = wrapValue(itemValue);
 
     value.classList.add('json2html-value');
@@ -71,12 +71,13 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     });
 
     let nestedElement = document.createElement('div');
-    let parentPropertyName = document.createElement('span');
-    let typeSignature = document.createElement('span');
-
     nestedElement.classList.add('json2html-nestedObject');
+
+    let parentPropertyName = document.createElement('span');
     parentPropertyName.textContent = params.keyName + ": ";
     parentPropertyName.classList.add('json2html-key');
+
+    let typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
 
     let constructorName = params.itemValue.constructor.name;
