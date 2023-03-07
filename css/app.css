@@ -23,6 +23,7 @@
     margin: 5px 0px;
     padding: 10px 15px;
     border-radius: 5px;
+    width: 1080px;
 }
 
 
@@ -32,7 +33,7 @@
 }
 
 #app__input textarea, #app__output {
-    width: 210px;
+    width: 520px;
     background: white;
     min-height: 226px;
     border: none;
