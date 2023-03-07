@@ -33,11 +33,17 @@
 }
 
 #app__input textarea, #app__output {
-    width: 520px;
+    width: 519px;
+    max-width: 519px;
     background: white;
-    min-height: 226px;
-    border: none;
     padding: 5px;
+    max-height: 400px;
+    height: 400px;
+    resize: none;
+    border: 1px solid #b6b6b6;
+    border-radius: 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #app__output {
