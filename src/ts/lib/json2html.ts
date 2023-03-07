@@ -31,27 +31,46 @@ function wrapValue(value: any){
 
 
 /**
+ * Checks if given string is a link.
+ * @param target string to check
+ * @returns 
+ */
+function isLink(target: string){
+    return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(target);
+}
+
+
+
+/**
  * Renders pair, where key:value - value is primitive type value.
  * @param keyName
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderPrimitiveItem(keyName: string, itemValue: any){
-
-    console.log(keyName, itemValue);
-    
+function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlightLinks: boolean}){
     let element = document.createElement('div');
     element.classList.add('json2html-pair');
     
     let propertyName = document.createElement('span');
-    propertyName.textContent = keyName + ": ";
+    propertyName.textContent = params.keyName + ": ";
     propertyName.classList.add('json2html-key');
     
     let value = document.createElement('span');
-    value.textContent = wrapValue(itemValue);
+    value.textContent = wrapValue(params.itemValue);
+
+    // insert link if highlightLinks is true and string is link
+    if(params.highlightLinks === true && isLink(params.itemValue)) {
+        let link = document.createElement('a');
+        link.setAttribute('target', '_blank');
+        link.href = params.itemValue;
+        link.textContent = `"${params.itemValue}"`;
+
+        value.textContent = '';
+        value.appendChild(link);
+    }
 
     value.classList.add('json2html-value');
-    value.classList.add(getValueTypeClassName(itemValue));
+    value.classList.add(getValueTypeClassName(params.itemValue));
 
     element.appendChild(propertyName);
     element.appendChild(value);
@@ -85,12 +104,13 @@ function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, 
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean}){
+function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean}){
     let nestedObject = params.itemValue;
 
     let renderedNested = render({
         parsedJSON: nestedObject,
         renderArrayLength: params.renderArrayLength,
+        highlightLinks: params.highlightLinks,
     });
     renderedNested.classList.add('json2html-nested-value')
 
@@ -165,7 +185,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
  * @param parsedJSON 
  * @returns 
  */
-function render(params: {parsedJSON: any, renderArrayLength: boolean}){
+function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean}){
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
@@ -175,18 +195,21 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean}){
         let isObject = isNotNull && params.parsedJSON[key].constructor.name === "Object";
         let isArray = isNotNull && params.parsedJSON[key].constructor.name === "Array";
 
-        console.log(params.parsedJSON[key], isNotNull, isArray, isObject);
-
         if(isNotNull && isObject || isArray) {
             let nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
                 renderArrayLength: params.renderArrayLength,
+                highlightLinks: params.highlightLinks,
            });
             
             siblings.push(nestedElement);
         } else {
-            let element = renderPrimitiveItem(key, params.parsedJSON[key]);
+            let element = renderPrimitiveItem({
+                keyName: key,
+                itemValue:  params.parsedJSON[key],
+                highlightLinks: params.highlightLinks,
+            });
 
             siblings.push(element);
         }
@@ -201,9 +224,10 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean}){
 
 
 
-export function json2html(params: {json: string, renderArrayLength?: boolean}){
+export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean}){
     // if renderArrayLength param not given - pass true
     params.renderArrayLength = params.renderArrayLength == false ? false : true;
+    params.highlightLinks = params.highlightLinks == false ? false : true;
 
     let parent = document.createElement('div');
 
@@ -211,6 +235,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean}){
     let rendered = render({
         parsedJSON: parsed,
         renderArrayLength: params.renderArrayLength,
+        highlightLinks: params.highlightLinks,
     });
     
     parent.appendChild(rendered);
