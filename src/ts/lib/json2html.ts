@@ -28,48 +28,88 @@ function wrapValue(value: any){
 
 
 
+/**
+ * Renders pair, where key:value - value is primitive type value.
+ * @param keyName
+ * @param itemValue 
+ * @returns ready for other manipulations HTML Node.
+ */
+function renderPrimitiveItem(keyName: string, itemValue: any){
+    let element = document.createElement('div');
+    let propertyName = document.createElement('span');
+    let value = document.createElement('span');
+
+    element.classList.add('json2html-pair');
+
+    propertyName.textContent = keyName + ": ";
+    propertyName.classList.add('json2html-key');
+
+    value.textContent = wrapValue(itemValue);
+    value.classList.add('json2html-value');
+    value.classList.add(getValueTypeClassName(itemValue));
+
+    element.appendChild(propertyName);
+    element.appendChild(value);
+
+    return element;
+}
+
+
+
+/**
+ * Renders complex pair, where key:value - value is Object or Array.
+ * @param keyName 
+ * @param itemValue 
+ * @returns ready for other manipulations HTML Node.
+ */
+function renderComplexItem(keyName: string, itemValue: any){
+    let nestedObject = itemValue;
+    let renderedNested = render(nestedObject);
+
+    let nestedElement = document.createElement('div');
+    let parentPropertyName = document.createElement('span');
+    let typeSignature = document.createElement('span');
+
+    nestedElement.classList.add('json2html-nestedObject');
+    parentPropertyName.textContent = keyName + ": ";
+    parentPropertyName.classList.add('json2html-key');
+    typeSignature.textContent = itemValue.constructor.name;
+
+    let constructorName = itemValue.constructor.name;
+    constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
+
+    typeSignature.classList.add('json2html-type__' + constructorName);
+    
+
+    nestedElement.appendChild(parentPropertyName);
+    nestedElement.appendChild(typeSignature);
+    nestedElement.appendChild(renderedNested);
+    
+    return nestedElement;
+}
+
+
+
+/**
+ * 
+ * @param parsedJSON 
+ * @returns 
+ */
 function render(parsedJSON: any){
     let keys = Object.keys(parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
     
     keys.forEach(key => {
-        if(parsedJSON[key].constructor.name === "Object") {
-            let nestedObject = parsedJSON[key];
-            let renderedNested = render(nestedObject);
-
-            let nestedElement = document.createElement('div');
-            let parentPropertyName = document.createElement('span');
-            let typeSignature = document.createElement('span');
-
-            nestedElement.classList.add('json2html-nestedObject');
-            parentPropertyName.textContent = key + ": ";
-            parentPropertyName.classList.add('json2html-key');
-            typeSignature.textContent = parsedJSON[key].constructor.name;
-            typeSignature.classList.add('json2html-type__object');
-            
-
-            nestedElement.appendChild(parentPropertyName);
-            nestedElement.appendChild(typeSignature);
-            nestedElement.appendChild(renderedNested);
+        if(
+            parsedJSON[key].constructor.name === "Object" 
+            || parsedJSON[key].constructor.name === "Array"
+        ) {
+           let nestedElement = renderComplexItem(key, parsedJSON[key]);
             
             siblings.push(nestedElement);
         } else {
-            let element = document.createElement('div');
-            let propertyName = document.createElement('span');
-            let value = document.createElement('span');
-
-            element.classList.add('json2html-pair');
-
-            propertyName.textContent = key + ": ";
-            propertyName.classList.add('json2html-key');
-
-            value.textContent = wrapValue(parsedJSON[key]);
-            value.classList.add('json2html-value');
-            value.classList.add(getValueTypeClassName(parsedJSON[key]));
-
-            element.appendChild(propertyName);
-            element.appendChild(value);
+            let element = renderPrimitiveItem(key, parsedJSON[key]);
 
             siblings.push(element);
         }
