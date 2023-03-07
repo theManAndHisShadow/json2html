@@ -1,3 +1,33 @@
+/**
+ * Checks given value type and returns CSS class name for it.
+ * @param value 
+ * @returns CSS class name, for example: "json2html-type__boolean"
+ */
+function getValueTypeClassName(value: any){
+    let classNameSample = 'json2html-type__';
+    let type = value == "null" || value == "undefined" ? value : typeof value;
+
+    return classNameSample + type;
+}
+
+
+
+/**
+ * Checks given value type and if is type "string" wraps value to double quotes.
+ * @param value 
+ * @returns prepared value
+ */
+function wrapValue(value: any){
+    let isString = typeof value == 'string';
+    let isNull = value == 'null';
+    let isUndefined = value == 'undefined';
+    let wrapped = !isNull && !isUndefined && isString ?  `"${value}"` : value;
+
+    return wrapped;
+}
+
+
+
 function render(parsedJSON: any){
     let keys = Object.keys(parsedJSON);
     let siblings: any[] = [];
@@ -34,20 +64,9 @@ function render(parsedJSON: any){
             propertyName.textContent = key + ": ";
             propertyName.classList.add('json2html-key');
 
-            let valueTypeCSSClassName;
-            if(parsedJSON[key] == "null") {
-                valueTypeCSSClassName = 'json2html-type__null';
-                value.textContent = parsedJSON[key]; 
-            } else if (parsedJSON[key] == "undefined") {
-                valueTypeCSSClassName = 'json2html-type__undefined';
-                value.textContent = parsedJSON[key]; 
-            } else {
-                valueTypeCSSClassName = 'json2html-type__' + typeof parsedJSON[key];
-                value.textContent = typeof parsedJSON[key]  == 'string' ? `"${parsedJSON[key]}"` : parsedJSON[key]; 
-            }
-
+            value.textContent = wrapValue(parsedJSON[key]);
             value.classList.add('json2html-value');
-            value.classList.add(valueTypeCSSClassName);
+            value.classList.add(getValueTypeClassName(parsedJSON[key]));
 
             element.appendChild(propertyName);
             element.appendChild(value);
