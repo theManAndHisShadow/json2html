@@ -1,13 +1,40 @@
 .json2html-pair  > *, 
-.json2html-nestedObject > * {
+.json2html-complex-pair > * {
     font-family: monospace;
     font-size: 14px;
 }
 
-.json2html-nestedObject div{
+.json2html-complex-pair span {
+    cursor: pointer;
+}
+
+.json2html-complex-pair div {
     margin-left: 15px;
     margin-top: 2px;
 }
+
+.json2html-spoiler-trigger--collapsed {
+    display: inline-block;
+    margin-right: -7px;
+    position: relative;
+    right: 9px;
+    color: #585858;
+    font-size: 10px;
+    bottom: 1px;
+    transition: 0.3s ease;
+}
+
+.json2html-spoiler-trigger--uncollapsed {
+    display: inline-block;
+    margin-right: -7px;
+    position: relative;
+    right: 9px;
+    color: #585858;
+    font-size: 10px;
+    transition: 0.3s ease;
+    transform: rotate(90deg);
+    bottom: -1px;
+} 
 
 .json2html-key {
     color: blue;
