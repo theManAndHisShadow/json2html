@@ -63,21 +63,32 @@ function renderPrimitiveItem(keyName: string, itemValue: any){
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(keyName: string, itemValue: any){
-    let nestedObject = itemValue;
-    let renderedNested = render(nestedObject);
+function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean}){
+    let nestedObject = params.itemValue;
+    let renderedNested = render({
+        parsedJSON: nestedObject,
+    });
 
     let nestedElement = document.createElement('div');
     let parentPropertyName = document.createElement('span');
     let typeSignature = document.createElement('span');
 
     nestedElement.classList.add('json2html-nestedObject');
-    parentPropertyName.textContent = keyName + ": ";
+    parentPropertyName.textContent = params.keyName + ": ";
     parentPropertyName.classList.add('json2html-key');
-    typeSignature.textContent = itemValue.constructor.name;
+    typeSignature.textContent = params.itemValue.constructor.name;
 
-    let constructorName = itemValue.constructor.name;
+    let constructorName = params.itemValue.constructor.name;
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
+
+    if(params.renderArrayLength === true) {
+        let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
+        let word = length == "empty" 
+                ? "" : length == 1 
+                    ? ' item' : " items";
+
+        typeSignature.textContent += ` (${length}${word})`;
+    }
 
     typeSignature.classList.add('json2html-type__' + constructorName);
     
@@ -96,21 +107,24 @@ function renderComplexItem(keyName: string, itemValue: any){
  * @param parsedJSON 
  * @returns 
  */
-function render(parsedJSON: any){
-    let keys = Object.keys(parsedJSON);
+function render(params: {parsedJSON: any, renderArrayLength?: boolean}){
+    let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
     
     keys.forEach(key => {
-        if(
-            parsedJSON[key].constructor.name === "Object" 
-            || parsedJSON[key].constructor.name === "Array"
-        ) {
-           let nestedElement = renderComplexItem(key, parsedJSON[key]);
+        let isObject =  params.parsedJSON[key].constructor.name === "Object";
+        let isArray = params.parsedJSON[key].constructor.name === "Array";
+        if(isObject || isArray) {
+            let nestedElement = renderComplexItem({
+                keyName: key,
+                itemValue: params.parsedJSON[key],
+                renderArrayLength: isArray === true ? params.renderArrayLength : false,
+           });
             
             siblings.push(nestedElement);
         } else {
-            let element = renderPrimitiveItem(key, parsedJSON[key]);
+            let element = renderPrimitiveItem(key, params.parsedJSON[key]);
 
             siblings.push(element);
         }
@@ -125,13 +139,20 @@ function render(parsedJSON: any){
 
 
 
-export function json2html(params: {json: string}){
+export function json2html(params: {json: string, renderArrayLength?: boolean}){
+    params.renderArrayLength = params.renderArrayLength || true;
+
     let parent = document.createElement('div');
 
     let parsed = JSON.parse(params.json);
-    let rendered = render(parsed);
+    let rendered = render({
+        parsedJSON: parsed,
+        renderArrayLength: params.renderArrayLength,
+    });
+    
     parent.appendChild(rendered);
-    console.log(rendered, parent);
+
+    console.log(params);
 
     return parent;
 }
