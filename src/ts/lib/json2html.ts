@@ -67,6 +67,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     let nestedObject = params.itemValue;
     let renderedNested = render({
         parsedJSON: nestedObject,
+        renderArrayLength: params.renderArrayLength,
     });
 
     let nestedElement = document.createElement('div');
@@ -81,7 +82,9 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     let constructorName = params.itemValue.constructor.name;
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
 
-    if(params.renderArrayLength === true) {
+    // only for Array items
+    let isArray = params.itemValue.constructor.name === "Array";
+    if(isArray && params.renderArrayLength === true) {
         let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
         let word = length == "empty" 
                 ? "" : length == 1 
@@ -107,7 +110,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
  * @param parsedJSON 
  * @returns 
  */
-function render(params: {parsedJSON: any, renderArrayLength?: boolean}){
+function render(params: {parsedJSON: any, renderArrayLength: boolean}){
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
@@ -119,7 +122,7 @@ function render(params: {parsedJSON: any, renderArrayLength?: boolean}){
             let nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
-                renderArrayLength: isArray === true ? params.renderArrayLength : false,
+                renderArrayLength: params.renderArrayLength,
            });
             
             siblings.push(nestedElement);
@@ -140,7 +143,8 @@ function render(params: {parsedJSON: any, renderArrayLength?: boolean}){
 
 
 export function json2html(params: {json: string, renderArrayLength?: boolean}){
-    params.renderArrayLength = params.renderArrayLength || true;
+    // if renderArrayLength param not given - pass true
+    params.renderArrayLength = params.renderArrayLength == false ? false : true;
 
     let parent = document.createElement('div');
 
