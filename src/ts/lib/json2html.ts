@@ -95,7 +95,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     let sploilerTriangle = document.createElement('span');
     sploilerTriangle.textContent = '▶';
-    sploilerTriangle.classList.add('json2html-spoiler-trigger');
+    sploilerTriangle.classList.add('json2html-spoiler-trigger--collapsed');
 
     let parentPropertyName = document.createElement('span');
     parentPropertyName.textContent = params.keyName + ": ";
@@ -104,6 +104,8 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     let typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
 
+    renderedNested.setAttribute('hidden', '');
+
     // Adding multiple event handlers, 
     // clicking on an element from the array below should invoke callback
     addMultipleEventHandlers([
@@ -111,17 +113,21 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
         parentPropertyName, 
         typeSignature
     ], 'click', event => {
-        let collapsed = 'json2html-spoiler-trigger--uncollapsed';
+        let collapsed = 'json2html-spoiler-trigger--collapsed';
+        let uncollapsed = 'json2html-spoiler-trigger--uncollapsed';
 
         // toggle nested object
         if(sploilerTriangle.classList.contains(collapsed)) {
             sploilerTriangle.classList.remove(collapsed);
-            renderedNested.setAttribute('hidden', '');
+            sploilerTriangle.classList.add(uncollapsed);
+            renderedNested.removeAttribute('hidden');
         } else {
             sploilerTriangle.classList.add(collapsed);
-            renderedNested.removeAttribute('hidden');
+            sploilerTriangle.classList.remove(uncollapsed);
+            renderedNested.setAttribute('hidden', '');
         };
     });
+    
 
     let constructorName = params.itemValue.constructor.name;
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
