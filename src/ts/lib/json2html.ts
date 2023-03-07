@@ -57,6 +57,24 @@ function renderPrimitiveItem(keyName: string, itemValue: any){
 
 
 
+
+type EventCallbackHandler = (event: Event) => void
+/**
+ * Adds multiple event handlers
+ * @param targets array of targets
+ * @param evenType event type
+ * @param callback callback function with access to event instance
+ */
+function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, callback: EventCallbackHandler){
+    targets.forEach(target => {
+        target.addEventListener(evenType, event => {
+            callback(event);
+        });
+    });
+}
+
+
+
 /**
  * Renders complex pair, where key:value - value is Object or Array.
  * @param keyName 
@@ -65,13 +83,19 @@ function renderPrimitiveItem(keyName: string, itemValue: any){
  */
 function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean}){
     let nestedObject = params.itemValue;
+
     let renderedNested = render({
         parsedJSON: nestedObject,
         renderArrayLength: params.renderArrayLength,
     });
+    renderedNested.classList.add('json2html-nested-value')
 
     let nestedElement = document.createElement('div');
-    nestedElement.classList.add('json2html-nestedObject');
+    nestedElement.classList.add('json2html-complex-pair');
+
+    let sploilerTriangle = document.createElement('span');
+    sploilerTriangle.textContent = '▶';
+    sploilerTriangle.classList.add('json2html-spoiler-trigger');
 
     let parentPropertyName = document.createElement('span');
     parentPropertyName.textContent = params.keyName + ": ";
@@ -79,6 +103,25 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     let typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
+
+    // Adding multiple event handlers, 
+    // clicking on an element from the array below should invoke callback
+    addMultipleEventHandlers([
+        sploilerTriangle, 
+        parentPropertyName, 
+        typeSignature
+    ], 'click', event => {
+        let collapsed = 'json2html-spoiler-trigger--uncollapsed';
+
+        // toggle nested object
+        if(sploilerTriangle.classList.contains(collapsed)) {
+            sploilerTriangle.classList.remove(collapsed);
+            renderedNested.setAttribute('hidden', '');
+        } else {
+            sploilerTriangle.classList.add(collapsed);
+            renderedNested.removeAttribute('hidden');
+        };
+    });
 
     let constructorName = params.itemValue.constructor.name;
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
@@ -97,6 +140,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     typeSignature.classList.add('json2html-type__' + constructorName);
     
 
+    nestedElement.appendChild(sploilerTriangle);
     nestedElement.appendChild(parentPropertyName);
     nestedElement.appendChild(typeSignature);
     nestedElement.appendChild(renderedNested);
