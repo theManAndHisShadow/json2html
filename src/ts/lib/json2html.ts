@@ -5,7 +5,7 @@
  */
 function getValueTypeClassName(value: any){
     let classNameSample = 'json2html-type__';
-    let type = value == "null" || value == "undefined" ? value : typeof value;
+    let type = value == null || value == "undefined" ? value : typeof value;
 
     return classNameSample + type;
 }
@@ -19,9 +19,11 @@ function getValueTypeClassName(value: any){
  */
 function wrapValue(value: any){
     let isString = typeof value == 'string';
-    let isNull = value == 'null';
-    let isUndefined = value == 'undefined';
-    let wrapped = !isNull && !isUndefined && isString ?  `"${value}"` : value;
+    let isNull = value == null;
+    let wrapped = value;
+
+    if(isNull) wrapped = `${value}`;
+    if(isString) wrapped = `"${value}"`;
 
     return wrapped;
 }
@@ -35,6 +37,8 @@ function wrapValue(value: any){
  * @returns ready for other manipulations HTML Node.
  */
 function renderPrimitiveItem(keyName: string, itemValue: any){
+
+    console.log(keyName, itemValue);
     
     let element = document.createElement('div');
     element.classList.add('json2html-pair');
@@ -167,9 +171,13 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean}){
     let rendered: HTMLDivElement = document.createElement('div');
     
     keys.forEach(key => {
-        let isObject =  params.parsedJSON[key].constructor.name === "Object";
-        let isArray = params.parsedJSON[key].constructor.name === "Array";
-        if(isObject || isArray) {
+        let isNotNull = params.parsedJSON[key] !== null;
+        let isObject = isNotNull && params.parsedJSON[key].constructor.name === "Object";
+        let isArray = isNotNull && params.parsedJSON[key].constructor.name === "Array";
+
+        console.log(params.parsedJSON[key], isNotNull, isArray, isObject);
+
+        if(isNotNull && isObject || isArray) {
             let nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
