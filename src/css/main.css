@@ -4,7 +4,7 @@
     font-size: 14px;
 }
 
-.json2html-complex-pair span {
+.json2html-complex-pair > span {
     cursor: pointer;
 }
 
