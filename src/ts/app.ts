@@ -8,11 +8,19 @@ function init(){
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
 
-    updateOutput(json2html(defaultJSONString));
+    let defaultFormatted = json2html({
+        json: defaultJSONString,
+    });
+
+    updateOutput(defaultFormatted);
 
     // update formatted JSON on textarea changing
     textArea.addEventListener('keyup', (event) => {
-        updateOutput(json2html(textArea.value));
+        let formatted = json2html({
+            json: textArea.value,
+        });
+
+        updateOutput(formatted);
     });
 }
 

@@ -45,6 +45,7 @@ function renderPrimitiveItem(keyName: string, itemValue: any){
     propertyName.classList.add('json2html-key');
 
     value.textContent = wrapValue(itemValue);
+
     value.classList.add('json2html-value');
     value.classList.add(getValueTypeClassName(itemValue));
 
@@ -124,10 +125,10 @@ function render(parsedJSON: any){
 
 
 
-export function json2html(json: string, isAlreadyParsed?: boolean){
+export function json2html(params: {json: string}){
     let parent = document.createElement('div');
 
-    let parsed = JSON.parse(json);
+    let parsed = JSON.parse(params.json);
     let rendered = render(parsed);
     parent.appendChild(rendered);
     console.log(rendered, parent);
