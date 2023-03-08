@@ -47,7 +47,7 @@ function isLink(target: string){
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlightLinks: boolean}){
+function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlightLinks: boolean,  showTypeOnHover: boolean}){
     let element = document.createElement('div');
     element.classList.add('json2html-pair');
     
@@ -57,6 +57,18 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
     
     let value = document.createElement('span');
     value.textContent = wrapValue(params.itemValue);
+
+    // show browser tooltip at primitive key value on hover
+    if(params.showTypeOnHover === true) {
+        let tip = params.itemValue == null ? 'null' : typeof params.itemValue;
+
+        // special tooltip for links
+        if(params.highlightLinks === true && isLink(params.itemValue)) {
+            tip = 'string (clickable link)'
+        }
+
+        value.setAttribute('title', tip);
+    }
 
     // insert link if highlightLinks is true and string is link
     if(params.highlightLinks === true && isLink(params.itemValue)) {
@@ -104,7 +116,7 @@ function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, 
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean}){
+function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
     let nestedObject = params.itemValue;
 
     let renderedNested = render({
@@ -112,6 +124,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
         renderArrayLength: params.renderArrayLength,
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
+        showTypeOnHover: params.showTypeOnHover,
     });
     renderedNested.classList.add('json2html-nested-value')
 
@@ -191,7 +204,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
  * @param parsedJSON 
  * @returns 
  */
-function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean}){
+function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
@@ -208,6 +221,7 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
                 renderArrayLength: params.renderArrayLength,
                 highlightLinks: params.highlightLinks,
                 collapseAll: params.collapseAll,
+                showTypeOnHover: params.showTypeOnHover,
            });
             
             siblings.push(nestedElement);
@@ -216,6 +230,7 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
                 keyName: key,
                 itemValue:  params.parsedJSON[key],
                 highlightLinks: params.highlightLinks,
+                showTypeOnHover: params.showTypeOnHover,
             });
 
             siblings.push(element);
@@ -231,11 +246,12 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
 
 
 
-export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean}){
+export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean}){
     // if renderArrayLength param not given - pass true
     params.renderArrayLength = params.renderArrayLength == false ? false : true;
-    params.collapseAll = params.collapseAll == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
+    params.collapseAll = params.collapseAll == false ? false : true;
+    params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
 
     let parent = document.createElement('div');
 
@@ -245,6 +261,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean, hi
         renderArrayLength: params.renderArrayLength,
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
+        showTypeOnHover: params.showTypeOnHover,
     });
     
     parent.appendChild(rendered);
