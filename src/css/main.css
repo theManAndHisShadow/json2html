@@ -10,6 +10,7 @@
 
 .json2html-complex-pair div {
     margin-left: 15px;
+    white-space: nowrap;
     margin-top: 2px;
 }
 
