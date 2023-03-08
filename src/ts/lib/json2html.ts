@@ -104,13 +104,14 @@ function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, 
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean}){
+function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean}){
     let nestedObject = params.itemValue;
 
     let renderedNested = render({
         parsedJSON: nestedObject,
         renderArrayLength: params.renderArrayLength,
         highlightLinks: params.highlightLinks,
+        collapseAll: params.collapseAll,
     });
     renderedNested.classList.add('json2html-nested-value')
 
@@ -119,7 +120,14 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     let sploilerTriangle = document.createElement('span');
     sploilerTriangle.textContent = '▶';
-    sploilerTriangle.classList.add('json2html-spoiler-trigger--collapsed');
+
+    // collapsin at start (or not)
+    if(params.collapseAll === true){
+        sploilerTriangle.classList.add('json2html-spoiler-trigger--collapsed');
+        renderedNested.setAttribute('hidden', '');
+    } else {
+        sploilerTriangle.classList.add('json2html-spoiler-trigger--uncollapsed');
+    }
 
     let parentPropertyName = document.createElement('span');
     parentPropertyName.textContent = params.keyName + ": ";
@@ -127,8 +135,6 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     let typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
-
-    renderedNested.setAttribute('hidden', '');
 
     // Adding multiple event handlers, 
     // clicking on an element from the array below should invoke callback
@@ -185,7 +191,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
  * @param parsedJSON 
  * @returns 
  */
-function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean}){
+function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean}){
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
@@ -201,6 +207,7 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
                 itemValue: params.parsedJSON[key],
                 renderArrayLength: params.renderArrayLength,
                 highlightLinks: params.highlightLinks,
+                collapseAll: params.collapseAll,
            });
             
             siblings.push(nestedElement);
@@ -224,9 +231,10 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
 
 
 
-export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean}){
+export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean}){
     // if renderArrayLength param not given - pass true
     params.renderArrayLength = params.renderArrayLength == false ? false : true;
+    params.collapseAll = params.collapseAll == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
 
     let parent = document.createElement('div');
@@ -236,6 +244,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean, hi
         parsedJSON: parsed,
         renderArrayLength: params.renderArrayLength,
         highlightLinks: params.highlightLinks,
+        collapseAll: params.collapseAll,
     });
     
     parent.appendChild(rendered);

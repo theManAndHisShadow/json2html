@@ -10,6 +10,7 @@ function init(){
 
     let defaultFormatted = json2html({
         json: defaultJSONString,
+        collapseAll: false,
     });
 
     updateOutput(defaultFormatted);
@@ -18,6 +19,7 @@ function init(){
     textArea.addEventListener('keyup', (event) => {
         let formatted = json2html({
             json: textArea.value,
+            collapseAll: false,
         });
 
         updateOutput(formatted);
