@@ -246,22 +246,9 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
 }
 
 
-function getThemeFile(themeName: string){
-    interface List {
-        [key: string]: string,
-    }
-
-    const list:List = {
-        default: 'css/themes/daylight.css',
-        dracula: 'css/themes/dracula.css',
-    };
-
-    return list[themeName];
-}
-
 
 function injectThemeCSS(themeName: string){
-    const filePath = getThemeFile(themeName);
+    const filePath = `css/themes/${themeName}.css`;
     const newStyleElement = document.createElement('link');
     newStyleElement.setAttribute('rel', 'stylesheet');
     newStyleElement.setAttribute('href', filePath);
