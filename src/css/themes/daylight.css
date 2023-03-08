@@ -1,0 +1,33 @@
+.json2html-container {
+    background: #282a36;
+    padding: 3px 17px;
+}
+
+.json2html-key {
+    color: blue;
+}
+
+.json2html-spoiler-trigger--collapsed,
+.json2html-spoiler-trigger--uncollapsed {
+    color: #585858;
+}
+
+.json2html-type__boolean {
+    color: blueviolet;
+}
+
+.json2html-type__number {
+    color: #1e7fcc;
+}
+
+.json2html-type__string {
+    color: #4caf50;
+}
+
+.json2html-type__null {
+    color: #9b9b9b;
+}
+
+.json2html-type__undefined {
+    color: #795548;
+} 

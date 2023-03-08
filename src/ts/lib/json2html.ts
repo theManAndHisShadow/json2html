@@ -208,6 +208,7 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
+    rendered.classList.add('json2html-container');
     
     keys.forEach(key => {
         let isNotNull = params.parsedJSON[key] !== null;
@@ -245,15 +246,40 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
 }
 
 
+function getThemeFile(themeName: string){
+    interface List {
+        [key: string]: string,
+    }
 
-export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean}){
+    const list:List = {
+        default: 'css/themes/daylight.css',
+        dracula: 'css/themes/dracula.css',
+    };
+
+    return list[themeName];
+}
+
+
+function injectThemeCSS(themeName: string){
+    const filePath = getThemeFile(themeName);
+    const newStyleElement = document.createElement('link');
+    newStyleElement.setAttribute('rel', 'stylesheet');
+    newStyleElement.setAttribute('href', filePath);
+
+    document.head.appendChild(newStyleElement);
+}
+
+
+
+export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean, theme?: string}){
     // if renderArrayLength param not given - pass true
     params.renderArrayLength = params.renderArrayLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
+    params.theme = params.theme || 'default';
 
-    let parent = document.createElement('div');
+    injectThemeCSS(params.theme);
 
     let parsed = JSON.parse(params.json);
     let rendered = render({
@@ -263,10 +289,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean, hi
         collapseAll: params.collapseAll,
         showTypeOnHover: params.showTypeOnHover,
     });
-    
-    parent.appendChild(rendered);
 
-    console.log(params);
-
-    return parent;
+    console.log(params, rendered.parentElement);
+    return rendered;
 }
