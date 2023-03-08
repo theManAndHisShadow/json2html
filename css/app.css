@@ -32,11 +32,15 @@
     float: left;
 }
 
+#app__input textarea{
+    padding: 5px;
+    max-height: 389px !important;
+}
+
 #app__input textarea, #app__output {
     width: 519px;
     max-width: 519px;
     background: white;
-    padding: 5px;
     max-height: 400px;
     height: 400px;
     resize: none;
@@ -49,5 +53,4 @@
 #app__output {
     margin-left: 5px;
     border-left: 1px solid #bababa;
-    padding-left: 18px;
 }
