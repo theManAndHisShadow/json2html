@@ -349,13 +349,28 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
 
 
 
+/**
+ * Injects theme style from css/themes folder to head tag.
+ * @param themeName name of theme css file
+ */
 function injectThemeCSS(themeName: string){
     const filePath = `css/themes/${themeName}.css`;
-    const newStyleElement = document.createElement('link');
-    newStyleElement.setAttribute('rel', 'stylesheet');
-    newStyleElement.setAttribute('href', filePath);
+    const style = document.head.querySelector('[data-style-origin="json2html"]');
+    const styleIsNotExist = !style;
 
-    document.head.appendChild(newStyleElement);
+    // add new stylesheet only once
+    if(styleIsNotExist) {
+        const newStyleElement = document.createElement('link');
+        newStyleElement.setAttribute('rel', 'stylesheet');
+        newStyleElement.setAttribute('data-style-origin', 'json2html');
+        newStyleElement.setAttribute('href', filePath);
+        document.head.appendChild(newStyleElement);
+    } else {
+        const isDifferentPath = style.getAttribute('href') !== filePath;
+        
+        // change href attr only is new theme
+        if(isDifferentPath) style.setAttribute('href', filePath);
+    }
 }
 
 
