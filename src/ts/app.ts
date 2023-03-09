@@ -18,14 +18,62 @@ function getSelectedThemeName(){
  * @param text 
  */
 function render(text: string){
+    let themeName = getSelectedThemeName();
+
     let formatted = json2html({
         json: text,
         collapseAll: false,
         showTypeOnHover: true,
-        theme: getSelectedThemeName(),
+        theme: themeName
     });
 
+    changeAppTheme(themeName);
+
     updateOutput(formatted);
+}
+
+
+/**
+ * Updates app colors using theme name. Using 'ugly' methods
+ * @param themeName 
+ */
+function changeAppTheme(themeName: string){
+    interface Collection {
+        [key: string]: {
+            [key: string]: string, 
+        };
+    }
+
+    const themes:Collection = {
+        dracula: {
+            background: '#282a36',
+            border: '#424242',
+            foreground: '#ffffff',
+        },
+
+        monokai: {
+            background: '#272822',
+            border: '#424242',
+            foreground: '#ffffff',
+        },
+
+        daylight: {
+            background: '#ffffff',
+            border: '#b6b6b6',
+            foreground: '#000000',
+        },
+    }
+
+    let appContainer: HTMLDivElement = document.querySelector('#app');
+    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    let outputContainer: HTMLDivElement = document.querySelector('#app__output');
+
+    appContainer.style.background = themes[themeName].background;
+    textArea.style.background = themes[themeName].background;
+    textArea.style.color = themes[themeName].foreground;
+    outputContainer.style.color = themes[themeName].foreground;
+    textArea.style.borderColor = themes[themeName].border;
+    outputContainer.style.borderColor = themes[themeName].border;
 }
 
 
