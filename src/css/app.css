@@ -24,6 +24,18 @@
     width: 1080px;
 }
 
+#app__controls {
+    /*border: 1px solid #484848; */
+    width: fit-content;
+    padding: 5px 10px;
+    margin: 6px auto;
+    border-radius: 3px;
+}
+
+#app__controls label {
+    font-size: 12px;
+}
+
 
 #app__input, #app__output {
     position: relative;
