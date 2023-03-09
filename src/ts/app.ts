@@ -46,19 +46,22 @@ function changeAppTheme(themeName: string){
 
     const themes:Collection = {
         dracula: {
-            background: '#282a36',
+            background: '#21232c',
+            tile: '#282a36',
             border: '#424242',
             foreground: '#ffffff',
         },
 
         monokai: {
-            background: '#272822',
+            background: '#22231e',
+            tile: '#272822',
             border: '#424242',
             foreground: '#ffffff',
         },
 
         daylight: {
-            background: '#ffffff',
+            background: '#e7e7e7',
+            tile: '#ffffff',
             border: '#b6b6b6',
             foreground: '#000000',
         },
@@ -70,7 +73,7 @@ function changeAppTheme(themeName: string){
     let outputContainer: HTMLDivElement = document.querySelector('#app__output');
 
     appContainer.style.background = themes[themeName].background;
-    textArea.style.background = themes[themeName].background;
+    textArea.style.background = themes[themeName].tile;
     appControls.style.color = themes[themeName].foreground;
     textArea.style.color = themes[themeName].foreground;
     outputContainer.style.color = themes[themeName].foreground;
