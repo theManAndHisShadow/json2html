@@ -1,6 +1,5 @@
 .json2html-container {
-    background: #282a36;
-    padding: 3px 17px;
+    background: white;
 }
 
 .json2html-key {
@@ -31,3 +30,16 @@
 .json2html-type__undefined {
     color: #795548;
 } 
+
+.json2html-collapse-all-trigger {
+    color: black;
+}
+
+.json2html-spoiler-trigger--uncollapsed:hover ~ .json2html-collapse-all-trigger,
+.json2html-key:hover ~ .json2html-collapse-all-trigger,
+.json2html-type__array:hover ~ .json2html-collapse-all-trigger,
+.json2html-type__object:hover ~ .json2html-collapse-all-trigger,
+.json2html-collapse-all-trigger:hover,
+.json2html-uncollapse-all:hover {
+    opacity: 0.4;
+}
