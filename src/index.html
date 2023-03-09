@@ -16,7 +16,16 @@
 <body>
     <div id="app">
         <div id="app__main-block">
-            <div id="app__controls"></div>
+            <div id="app__controls">
+                <label>
+                    JSON result color theme
+                    <select id="controls__theme-selector">
+                        <option value="daylight" selected>Daylight</option>
+                        <option value="dracula">Dracula</option>
+                        <option value="monokai">Monokai</option>
+                    </select>
+                </label>
+            </div>
             <div id="app__input">
                 <textarea placeholder="json string">
                 </textarea>

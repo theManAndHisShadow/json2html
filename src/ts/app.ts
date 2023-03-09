@@ -1,6 +1,17 @@
 import { json2html } from './lib/json2html';
 
 
+/**
+ * Returns current seleted by user app theme name.
+ * @returns theme name
+ */
+function getSelectedThemeName(){
+    let themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
+
+    return themeSelector.value;
+}
+
+
 
 function init(){
     let defaultJSONString = `{
@@ -14,18 +25,19 @@ function init(){
         json: defaultJSONString,
         collapseAll: false,
         showTypeOnHover: true,
-        theme: 'dracula',
+        theme: getSelectedThemeName(),
     });
 
     updateOutput(defaultFormatted);
 
     // update formatted JSON on textarea changing
     textArea.addEventListener('keyup', (event) => {
+
         let formatted = json2html({
             json: textArea.value,
             collapseAll: false,
             showTypeOnHover: true,
-            theme: 'dracula',
+            theme: getSelectedThemeName(),
         });
 
         updateOutput(formatted);
