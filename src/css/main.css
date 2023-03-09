@@ -65,3 +65,13 @@
     color: white;
     transition: 0.3s ease;
 }
+
+.json2html-container {
+    padding: 3px 10px;
+    margin-left: 5px;
+}
+
+.json2html-container:first-child {
+    margin-left: 0px;
+    padding-left: 15px;
+}
