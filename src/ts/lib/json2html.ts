@@ -92,6 +92,18 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
 
 
 
+/**
+ * Emulates event by eventType on target element.
+ * @param target event target
+ * @param evenType event trigger type, for example "click"
+ */
+function emulateEvent(target: Element, evenType: string){
+    let evObj = document.createEvent('Events');
+    evObj.initEvent(evenType, true, false);
+    target.dispatchEvent(evObj);
+}
+
+
 
 type EventCallbackHandler = (event: Event) => void
 /**
@@ -106,6 +118,73 @@ function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, 
             callback(event);
         });
     });
+}
+
+
+
+/**
+ * Checks the presence of nested elements.
+ * @param targetItem parent item to check
+ * @returns 
+ */
+function hasNestedItems(targetItem: any){
+    let result = false;
+    
+    Object.values(targetItem).forEach(targetItem => {
+        if(targetItem !== null){
+            if(targetItem.constructor.name === "Object" || targetItem.constructor.name === "Array") result = true;
+        }
+    });
+
+    return result;
+}
+
+
+
+/**
+ * Updates the text content of the collapse button.
+ * @param spoiler target spoiler, that affects to collapse buttons text contents
+ * @param collapseButton Target collapse button. An optional argument. If empty, the function will itself look for a button
+ */
+function updateCollapseButton(spoiler: Element, collapseButton?: Element){
+    let collapseButtonClassName = 'json2html-collapse-all-trigger';
+    collapseButton = collapseButton || spoiler.parentElement.querySelector(`.${collapseButtonClassName}`);
+
+    let triggerState = spoiler.className.split('--')[1];
+    let action = triggerState == "uncollapsed" ? "collapse" : "uncollapse";
+    if(collapseButton) collapseButton.textContent = `(${action} all)`
+}
+
+
+
+/**
+ * Renders collapse helper buttons near complex pairs.
+ * @param params 
+ */
+function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Element, collapsed: boolean, nestedObject: any}){
+    let collapseButtonClassName = 'json2html-collapse-all-trigger';
+    let isExist = params.renderIn.querySelector(`${collapseButtonClassName}`);
+    let collapseAllNestedBtn = isExist || document.createElement('span');
+    if(!isExist) collapseAllNestedBtn.className = collapseButtonClassName;
+    
+    // initial button element update
+    updateCollapseButton(params.targetSpoiler, collapseAllNestedBtn);
+
+    // on click emulate clicking at spoiler buttons c:
+    collapseAllNestedBtn.addEventListener('click', event => {
+        // get all spoilers button on that tree branch
+        let sploilers = params.renderIn.querySelectorAll('.' + params.targetSpoiler.className);
+        
+        sploilers.forEach(spoiler => {
+            emulateEvent(spoiler, 'click');
+
+            updateCollapseButton(spoiler);
+        });
+
+    });
+
+    // add once
+    if(!isExist) params.renderIn.appendChild(collapseAllNestedBtn);
 }
 
 
@@ -131,15 +210,15 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     let nestedElement = document.createElement('div');
     nestedElement.classList.add('json2html-complex-pair');
 
-    let sploilerTriangle = document.createElement('span');
-    sploilerTriangle.textContent = '▶';
+    let spoilerBtn = document.createElement('span');
+    spoilerBtn.textContent = '▶';
 
     // collapsin at start (or not)
     if(params.collapseAll === true){
-        sploilerTriangle.classList.add('json2html-spoiler-trigger--collapsed');
+        spoilerBtn.classList.add('json2html-spoiler-trigger--collapsed');
         renderedNested.setAttribute('hidden', '');
     } else {
-        sploilerTriangle.classList.add('json2html-spoiler-trigger--uncollapsed');
+        spoilerBtn.classList.add('json2html-spoiler-trigger--uncollapsed');
     }
 
     let parentPropertyName = document.createElement('span');
@@ -149,10 +228,11 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     let typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
 
+
     // Adding multiple event handlers, 
     // clicking on an element from the array below should invoke callback
     addMultipleEventHandlers([
-        sploilerTriangle, 
+        spoilerBtn, 
         parentPropertyName, 
         typeSignature
     ], 'click', event => {
@@ -160,15 +240,17 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
         let uncollapsed = 'json2html-spoiler-trigger--uncollapsed';
 
         // toggle nested object
-        if(sploilerTriangle.classList.contains(collapsed)) {
-            sploilerTriangle.classList.remove(collapsed);
-            sploilerTriangle.classList.add(uncollapsed);
+        if(spoilerBtn.classList.contains(collapsed)) {
+            spoilerBtn.classList.remove(collapsed);
+            spoilerBtn.classList.add(uncollapsed);
             renderedNested.removeAttribute('hidden');
         } else {
-            sploilerTriangle.classList.add(collapsed);
-            sploilerTriangle.classList.remove(uncollapsed);
+            spoilerBtn.classList.add(collapsed);
+            spoilerBtn.classList.remove(uncollapsed);
             renderedNested.setAttribute('hidden', '');
         };
+
+        updateCollapseButton(spoilerBtn);
     });
     
 
@@ -189,9 +271,23 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     typeSignature.classList.add('json2html-type__' + constructorName);
     
 
-    nestedElement.appendChild(sploilerTriangle);
+    nestedElement.appendChild(spoilerBtn);
     nestedElement.appendChild(parentPropertyName);
     nestedElement.appendChild(typeSignature);
+
+    // if item contains nested object 
+    // render special button "collapse all" 
+    // only complex values that can be collapsed 
+    // cause primitive values conatins simple structures
+    if(hasNestedItems(nestedObject)) {
+        renderCollapseButtons({
+            targetSpoiler: spoilerBtn,
+            renderIn: nestedElement,
+            collapsed: params.collapseAll,
+            nestedObject: nestedObject,
+        });
+    }
+
     nestedElement.appendChild(renderedNested);
     
     return nestedElement;
@@ -270,7 +366,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean, hi
 
     let parsed = JSON.parse(params.json);
     let rendered = render({
-        parsedJSON: parsed,
+        parsedJSON: {json: parsed},
         renderArrayLength: params.renderArrayLength,
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
