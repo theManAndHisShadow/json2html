@@ -229,30 +229,31 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     typeSignature.textContent = params.itemValue.constructor.name;
 
 
-    // Adding multiple event handlers, 
-    // clicking on an element from the array below should invoke callback
-    addMultipleEventHandlers([
-        spoilerBtn, 
-        parentPropertyName, 
-        typeSignature
-    ], 'click', event => {
-        let collapsed = 'json2html-spoiler-trigger--collapsed';
-        let uncollapsed = 'json2html-spoiler-trigger--uncollapsed';
-
-        // toggle nested object
-        if(spoilerBtn.classList.contains(collapsed)) {
-            spoilerBtn.classList.remove(collapsed);
-            spoilerBtn.classList.add(uncollapsed);
-            renderedNested.removeAttribute('hidden');
-        } else {
-            spoilerBtn.classList.add(collapsed);
-            spoilerBtn.classList.remove(uncollapsed);
-            renderedNested.setAttribute('hidden', '');
-        };
-
-        updateCollapseButton(spoilerBtn);
-    });
+    if(Object.values(nestedObject).length > 0){
+        // Adding multiple event handlers, 
+        // clicking on an element from the array below should invoke callback
+        addMultipleEventHandlers([
+            spoilerBtn, 
+            parentPropertyName, 
+            typeSignature
+        ], 'click', event => {
+            let collapsed = 'json2html-spoiler-trigger--collapsed';
+            let uncollapsed = 'json2html-spoiler-trigger--uncollapsed';
     
+            // toggle nested object
+            if(spoilerBtn.classList.contains(collapsed)) {
+                spoilerBtn.classList.remove(collapsed);
+                spoilerBtn.classList.add(uncollapsed);
+                renderedNested.removeAttribute('hidden');
+            } else {
+                spoilerBtn.classList.add(collapsed);
+                spoilerBtn.classList.remove(uncollapsed);
+                renderedNested.setAttribute('hidden', '');
+            };
+    
+            updateCollapseButton(spoilerBtn);
+        });
+    }
 
     let constructorName = params.itemValue.constructor.name;
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
@@ -270,8 +271,8 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     typeSignature.classList.add('json2html-type__' + constructorName);
     
+    if(Object.values(nestedObject).length > 0) nestedElement.appendChild(spoilerBtn);
 
-    nestedElement.appendChild(spoilerBtn);
     nestedElement.appendChild(parentPropertyName);
     nestedElement.appendChild(typeSignature);
 
@@ -279,7 +280,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
     // render special button "collapse all" 
     // only complex values that can be collapsed 
     // cause primitive values conatins simple structures
-    if(hasNestedItems(nestedObject)) {
+    if(Object.values(nestedObject).length > 0 && hasNestedItems(nestedObject)) {
         renderCollapseButtons({
             targetSpoiler: spoilerBtn,
             renderIn: nestedElement,
@@ -288,7 +289,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
         });
     }
 
-    nestedElement.appendChild(renderedNested);
+    if(Object.values(nestedObject).length > 0) nestedElement.appendChild(renderedNested);
     
     return nestedElement;
 }
