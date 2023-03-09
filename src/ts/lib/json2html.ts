@@ -195,12 +195,12 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(params: {keyName: string, itemValue: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
+function renderComplexItem(params: {keyName: string, itemValue: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
     let nestedObject = params.itemValue;
 
     let renderedNested = render({
         parsedJSON: nestedObject,
-        renderArrayLength: params.renderArrayLength,
+        renderNestedLength: params.renderNestedLength,
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
         showTypeOnHover: params.showTypeOnHover,
@@ -260,13 +260,18 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
 
     // only for Array items
     let isArray = params.itemValue.constructor.name === "Array";
-    if(isArray && params.renderArrayLength === true) {
-        let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
-        let word = length == "empty" 
-                ? "" : length == 1 
-                    ? ' item' : " items";
-
-        typeSignature.textContent += ` (${length}${word})`;
+    let isObject = params.itemValue.constructor.name === "Object";
+    if(params.renderNestedLength === true) {
+        if(isArray) {
+            let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
+            let word = length == "empty" 
+                    ? "" : length == 1 
+                        ? ' item' : " items";
+    
+            typeSignature.textContent += ` (${length}${word})`;
+        } else if(isObject && Object.keys(params.itemValue).length === 0){
+            typeSignature.textContent += ` (empty)`;
+        }
     }
 
     typeSignature.classList.add('json2html-type__' + constructorName);
@@ -301,7 +306,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderArray
  * @param parsedJSON 
  * @returns 
  */
-function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
+function render(params: {parsedJSON: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
     let keys = Object.keys(params.parsedJSON);
     let siblings: any[] = [];
     let rendered: HTMLDivElement = document.createElement('div');
@@ -316,7 +321,7 @@ function render(params: {parsedJSON: any, renderArrayLength: boolean, highlightL
             let nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
-                renderArrayLength: params.renderArrayLength,
+                renderNestedLength: params.renderNestedLength,
                 highlightLinks: params.highlightLinks,
                 collapseAll: params.collapseAll,
                 showTypeOnHover: params.showTypeOnHover,
@@ -355,9 +360,9 @@ function injectThemeCSS(themeName: string){
 
 
 
-export function json2html(params: {json: string, renderArrayLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean, theme?: string}){
-    // if renderArrayLength param not given - pass true
-    params.renderArrayLength = params.renderArrayLength == false ? false : true;
+export function json2html(params: {json: string, renderNestedLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean, theme?: string}){
+    // if renderNestedLength param not given - pass true
+    params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
@@ -368,7 +373,7 @@ export function json2html(params: {json: string, renderArrayLength?: boolean, hi
     let parsed = JSON.parse(params.json);
     let rendered = render({
         parsedJSON: {json: parsed},
-        renderArrayLength: params.renderArrayLength,
+        renderNestedLength: params.renderNestedLength,
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
         showTypeOnHover: params.showTypeOnHover,
