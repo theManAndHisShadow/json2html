@@ -1,6 +1,98 @@
 import { json2html } from './lib/json2html';
 
 
+
+/**
+ * Returns theme colors object.
+ * @param themeName name of theme
+ * @returns object of theme colors, for example {propColor: hex}
+ */
+function getThemeColors(themeName: string){
+    interface Collection {
+        [key: string]: {
+            [key: string]: string, 
+        };
+    }
+
+    const themes:Collection = {
+        dracula: {
+            background: '#21232c',
+            tile: '#282a36',
+            border: '#424242',
+            foreground: '#ffffff',
+            error: '#ee5d44',
+        },
+
+        monokai: {
+            background: '#22231e',
+            tile: '#272822',
+            border: '#424242',
+            foreground: '#ffffff',
+            error: '#fd971f',
+        },
+
+        daylight: {
+            background: '#e7e7e7',
+            tile: '#ffffff',
+            border: '#b6b6b6',
+            foreground: '#000000',
+            error: '#bf0404',
+        },
+
+        horizon: {
+            background: '#ded5cc',
+            tile: '#ffffff',
+            border: '#b6b6b6',
+            foreground: '#2f2f2f',
+            error: '#bf0404',
+        },
+
+        "github-light": {
+            background: '#e7e7e7',
+            tile: '#ffffff',
+            border: '#cacdd1',
+            foreground: '#25292f',
+            error: '#bf0404',
+        },
+
+        "github-dark": {
+            background: '#10161d',
+            tile: '#0d1117',
+            border: '#30373d',
+            foreground: '#c9d1d9',
+            error: '#cd3c3c',
+        },
+
+        "gruvbox-dark": {
+            background: '#242424',
+            tile: '#282828',
+            border: '#3f3f3f',
+            foreground: '#A89984',
+            error: '#bf241d',
+        },
+
+        "gruvbox-light": {
+            background: '#e1d8b2',
+            tile: '#FBF1C7',
+            border: '#b7a5a0',
+            foreground: '#7C6F64',
+            error: '#bf241d',
+        },
+
+        andromeda:{
+            background: '#1e2127',
+            tile: '#23262e',
+            border: '#444444',
+            foreground: '#adb2bc',
+            error: '#bf241d',
+        },
+    }
+
+    return themes[themeName];
+}
+
+
+
 /**
  * Returns current seleted by user app theme name.
  * @returns theme name
@@ -14,140 +106,108 @@ function getSelectedThemeName(){
 
 
 /**
+ * Updates app colors using theme name. Using 'ugly' methods
+ * @param themeName 
+ */
+function changeAppTheme(themeName: string){
+    let themeColors = getThemeColors(themeName);
+
+    let appContainer: HTMLDivElement = document.querySelector('#app');
+    let appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
+    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    let appControls: HTMLDivElement = document.querySelector('#app__controls');
+    let themeSelector: HTMLSelectElement = document.querySelector('#app__controls select');
+    let outputContainer: HTMLDivElement = document.querySelector('#app__output');
+
+    appContainer.style.background = themeColors.background;
+
+    textArea.style.background = themeColors.tile;
+    appInput.style.background = themeColors.tile;
+    outputContainer.style.background = themeColors.tile;
+    outputContainer.style.background = themeColors.tile;
+    themeSelector.style.background = themeColors.tile;
+    
+    
+    appControls.style.color = themeColors.foreground;
+    textArea.style.color = themeColors.foreground;
+    outputContainer.style.color = themeColors.foreground;
+    themeSelector.style.color = themeColors.foreground;
+
+    textArea.style.borderColor = themeColors.border;
+    appInput.style.borderColor = themeColors.border;
+    outputContainer.style.borderColor = themeColors.border;
+    themeSelector.style.borderColor = themeColors.border;
+}
+
+
+
+/**
+ * Show or hide error message container.
+ * @param state visibility of errror message container
+ * @param message error message
+ */
+function toggleErrorMessage(state: boolean, message?: string){
+    let errorMessageConainer:HTMLDivElement = document.querySelector('#app__error-message');
+    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+
+    if(state === true) {
+        let errorMessage = `[Error! ${message}]:`;
+        let themeName = getSelectedThemeName();
+        let themeColors = getThemeColors(themeName);
+        errorMessageConainer.textContent = errorMessage;
+        errorMessageConainer.style.display = 'initial';
+        errorMessageConainer.style.color = themeColors.error;
+        textArea.style.color = themeColors.error;
+        textArea.style.top = '20px';
+    } else {
+        errorMessageConainer.style.display = 'none';
+        textArea.style.top = '0px';
+    }
+}
+
+
+
+/**
+ * Updates output container inner content.
+ * @param newOutput 
+ */
+function updateOutput(newOutput: HTMLDivElement){
+    let output = document.querySelector('#app__output');
+
+    output.children.length == 0 
+        ? output.appendChild(newOutput) 
+        : output.replaceChild(newOutput, output.firstElementChild);
+}
+
+
+
+/**
  * Renders text as parsed and formatted JSON.
  * @param text 
  */
-function render(text: string){
+function renderText(text: string){
     let themeName = getSelectedThemeName();
 
     let formatted = json2html({
         json: text,
         collapseAll: false,
         showTypeOnHover: true,
-        theme: themeName
+        theme: themeName,
+        // on error show error message
+        onError: error => {
+            toggleErrorMessage(true, error.message);
+        },
     });
 
-    changeAppTheme(themeName);
+    // if variable 'formatted' returned from json2html function
+    // it means that code executed wuthout error
+    if(formatted) {
+        // then hide error message
+        toggleErrorMessage(false);
 
-    updateOutput(formatted);
-}
-
-
-/**
- * Updates app colors using theme name. Using 'ugly' methods
- * @param themeName 
- */
-function changeAppTheme(themeName: string){
-    interface Collection {
-        [key: string]: {
-            [key: string]: string, 
-        };
+        changeAppTheme(themeName);
+        updateOutput(formatted);
     }
-
-    const themes:Collection = {
-        dracula: {
-            background: '#21232c',
-            tile: '#282a36',
-            border: '#424242',
-            foreground: '#ffffff',
-        },
-
-        monokai: {
-            background: '#22231e',
-            tile: '#272822',
-            border: '#424242',
-            foreground: '#ffffff',
-        },
-
-        daylight: {
-            background: '#e7e7e7',
-            tile: '#ffffff',
-            border: '#b6b6b6',
-            foreground: '#000000',
-        },
-
-        horizon: {
-            background: '#ded5cc',
-            tile: '#ffffff',
-            border: '#b6b6b6',
-            foreground: '#2f2f2f',
-        },
-
-        "github-light": {
-            background: '#e7e7e7',
-            tile: '#ffffff',
-            border: '#cacdd1',
-            foreground: '#25292f',
-        },
-
-        "github-dark": {
-            background: '#10161d',
-            tile: '#0d1117',
-            border: '#30373d',
-            foreground: '#c9d1d9',
-        },
-
-        "gruvbox-dark": {
-            background: '#242424',
-            tile: '#282828',
-            border: '#3f3f3f',
-            foreground: '#A89984',
-        },
-
-        "gruvbox-light": {
-            background: '#e1d8b2',
-            tile: '#FBF1C7',
-            border: '#b7a5a0',
-            foreground: '#7C6F64',
-        },
-
-        andromeda:{
-            background: '#1e2127',
-            tile: '#23262e',
-            border: '#444444',
-            foreground: '#adb2bc',
-        },
-    }
-
-    // a
-    const a = {
-        aaa: true,
-        b: 1,
-        string: "Hello world!",
-        link: "https://www.freedesktop.org/wiki/",
-        number: 42,
-        negativeNumber: -1,
-        floatNumber: 3.1415926535,
-        boolean: true,
-        isUndefined: "undefined",
-        d: {
-            a: 1,
-        },
-
-    };
-
-    let appContainer: HTMLDivElement = document.querySelector('#app');
-    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
-    let appControls: HTMLDivElement = document.querySelector('#app__controls');
-    let themeSelector: HTMLSelectElement = document.querySelector('#app__controls select');
-    let outputContainer: HTMLDivElement = document.querySelector('#app__output');
-
-    appContainer.style.background = themes[themeName].background;
-
-    textArea.style.background = themes[themeName].tile;
-    outputContainer.style.background = themes[themeName].tile;
-    outputContainer.style.background = themes[themeName].tile;
-    themeSelector.style.background = themes[themeName].tile;
-    
-    
-    appControls.style.color = themes[themeName].foreground;
-    textArea.style.color = themes[themeName].foreground;
-    outputContainer.style.color = themes[themeName].foreground;
-    themeSelector.style.color = themes[themeName].foreground;
-
-    textArea.style.borderColor = themes[themeName].border;
-    outputContainer.style.borderColor = themes[themeName].border;
-    themeSelector.style.borderColor = themes[themeName].border;
 }
 
 
@@ -157,32 +217,37 @@ function init(){
     "string":"Hello world!", "paragraph":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo?", "link":"https://www.freedesktop.org/wiki/","number":42, "negativeNumber": -1,"floatNumber":3.1415926535,"boolean":true, "isNull": null, "isUndefined": "undefined", "emptyArray": [], "emptyObject": {}, "arrayOfNumbers": [1, 2, 3, 4, 5], "arrayOfObjects": [{"id": 1, "profileType":"public","blocked": false}, {"id":2, "profileType":"private", "blocked": true}, {"id": 3, "profileType":"private", "blocked": false}], "superNested": { "level1": {"level2": {"level3": {"level4":{"level5":{"level6":"Btw I use Arch"}}}}}}
 }`;
 
+    let appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
     let themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
    
     // render on init
-    render(defaultJSONString);
+    renderText(defaultJSONString);
+
+    // emulate textarea focusing
+    appInput.addEventListener('click', event => {
+        let target: HTMLElement = event.target as HTMLElement;
+
+        // if event target is not text area
+        if(target.tagName !== 'TEXTAREA') {
+            // focus on textarea end
+            const lineEnd = textArea.value.length;
+
+            textArea.setSelectionRange(lineEnd, lineEnd);
+            textArea.focus();
+        }
+    });
 
     // render on theme changing
     themeSelector.addEventListener('change', event => {
-        render(textArea.value);
+        renderText(textArea.value);
     });
 
     // render formatted JSON on textarea changing
     textArea.addEventListener('keyup', (event) => {
-        render(textArea.value);
+        renderText(textArea.value);
     });
-}
-
-
-
-function updateOutput(newOutput: HTMLDivElement){
-    let output = document.querySelector('#app__output');
-
-    output.children.length == 0 
-        ? output.appendChild(newOutput) 
-        : output.replaceChild(newOutput, output.firstElementChild);
 }
 
 

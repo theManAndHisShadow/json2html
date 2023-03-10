@@ -17,7 +17,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50.1%, -50.2%);
+    transform: translate(-50.1%, -50.3%);
     margin: 5px 0px;
     padding: 10px 15px;
     border-radius: 5px;
@@ -32,6 +32,13 @@
     border-radius: 3px;
 }
 
+#app__error-message {
+    display: none;
+    font-size: 13px;
+    position: absolute;
+    padding: 5px;
+}
+
 #app__controls label {
     font-size: 14px;
 }
@@ -44,23 +51,38 @@
 }
 
 
+#app__input {
+    cursor: text;
+}
+
 #app__input, #app__output {
     position: relative;
     float: left;
 }
 
-#app__input textarea{
+#app__input textarea {
     padding: 5px;
-    max-height: 389px !important;
-    font: 13px;
+    font-size: 13px;
+    width: 486px;
+    height: fit-content;
+    resize: none;
+    border: none;
+    position: relative;
+    display: inline-table;
 }
 
-#app__input textarea, #app__output {
-    width: 519px;
-    max-width: 519px;
-    max-height: 400px;
+#app__input textarea:focus {
+    outline: none;
+}
+
+#app__input:has(textarea:focus) {
+    outline: 3px solid #0371f4;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+#app__input, #app__output {
+    width: 520px;
     height: 400px;
-    resize: none;
     border: 1px solid #b6b6b6;
     border-radius: 4px;
     overflow-x: hidden;
