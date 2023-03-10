@@ -79,6 +79,13 @@ function changeAppTheme(themeName: string){
             border: '#999999',
             foreground: '#7C6F64',
         },
+
+        andromeda:{
+            background: '#1e2127',
+            tile: '#23262e',
+            border: '#444444',
+            foreground: '#adb2bc',
+        },
     }
 
     let appContainer: HTMLDivElement = document.querySelector('#app');
