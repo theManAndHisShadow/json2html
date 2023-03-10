@@ -83,14 +83,14 @@ function changeAppTheme(themeName: string){
         "gruvbox-dark": {
             background: '#242424',
             tile: '#282828',
-            border: '#555555',
+            border: '#3f3f3f',
             foreground: '#A89984',
         },
 
         "gruvbox-light": {
             background: '#e1d8b2',
             tile: '#FBF1C7',
-            border: '#999999',
+            border: '#b7a5a0',
             foreground: '#7C6F64',
         },
 
