@@ -45,6 +45,7 @@
 #app__input textarea{
     padding: 5px;
     max-height: 389px !important;
+    font: 13px;
 }
 
 #app__input textarea, #app__output {
