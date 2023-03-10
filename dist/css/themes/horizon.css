@@ -1,9 +1,9 @@
 .json2html-container {
-    background: white;
+    background: #fffbf7;
 }
 
 .json2html-key {
-    color: blue;
+    color: #da103f;
 }
 
 .json2html-spoiler-trigger--collapsed,
@@ -12,15 +12,15 @@
 }
 
 .json2html-type__boolean {
-    color: blueviolet;
+    color: #8a31b9;
 }
 
 .json2html-type__number {
-    color: #1e7fcc;
+    color: #1766a5;
 }
 
 .json2html-type__string {
-    color: #4caf50;
+    color: #f6661e;
 }
 
 .json2html-type__null {
@@ -28,11 +28,22 @@
 }
 
 .json2html-type__undefined {
-    color: #795548;
+    color: #3f51b5;
 } 
 
 .json2html-collapse-all-trigger {
     color: black;
+}
+
+.json2html-type__string a, 
+.json2html-type__string a:visited {
+    color: #c14e15;
+}
+
+
+.json2html-type__array,
+.json2html-type__object {
+    color: #846e64;
 }
 
 .json2html-spoiler-trigger--uncollapsed:hover ~ .json2html-collapse-all-trigger,

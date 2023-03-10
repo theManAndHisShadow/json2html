@@ -1,38 +1,48 @@
 .json2html-container {
-    background: white;
+    background: #ffffff;
 }
 
 .json2html-key {
-    color: blue;
+    color: #25292f;
 }
 
 .json2html-spoiler-trigger--collapsed,
 .json2html-spoiler-trigger--uncollapsed {
-    color: #585858;
+    color: #afafaf;
 }
 
 .json2html-type__boolean {
-    color: blueviolet;
+    color: #6f42c1;
 }
 
 .json2html-type__number {
-    color: #1e7fcc;
+    color: #005cc5;
 }
 
 .json2html-type__string {
-    color: #4caf50;
+    color: #0a3069;
+}
+
+.json2html-type__string a, 
+.json2html-type__string a:visited {
+    color: #0a3069;
 }
 
 .json2html-type__null {
-    color: #9b9b9b;
+    color: #6a737d;
 }
 
 .json2html-type__undefined {
-    color: #795548;
+    color: #005cc5;
 } 
 
+.json2html-type__array,
+.json2html-type__object {
+    color: #005cc5;
+}
+
 .json2html-collapse-all-trigger {
-    color: black;
+    color: #6a737d;
 }
 
 .json2html-spoiler-trigger--uncollapsed:hover ~ .json2html-collapse-all-trigger,
@@ -41,9 +51,9 @@
 .json2html-type__object:hover ~ .json2html-collapse-all-trigger,
 .json2html-collapse-all-trigger:hover,
 .json2html-uncollapse-all:hover {
-    opacity: 0.4;
+    opacity: 0.35;
 }
 
 .json2html-value__minus-sign {
-    color: #b44343;
+    color: #25292f;
 }
