@@ -1,0 +1,42 @@
+.json2html-container {
+    background: #282828;
+}
+
+.json2html-key {
+    color: #98971A;
+}
+
+.json2html-spoiler-trigger--collapsed,
+.json2html-spoiler-trigger--uncollapsed {
+    color: #585858;
+}
+
+.json2html-type__boolean {
+    color: #B16286;
+}
+
+.json2html-type__number {
+    color: #B16286;
+}
+
+.json2html-type__string {
+    color: #458588;
+}
+
+.json2html-type__string a, 
+.json2html-type__string a:visited {
+    color: 	#689D6A;
+}
+
+.json2html-type__null {
+    color: #504945;
+}
+
+.json2html-type__undefined {
+    color: #CC241D;
+} 
+
+.json2html-type__array,
+.json2html-type__object {
+    color: #A89984;
+}

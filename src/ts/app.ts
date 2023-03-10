@@ -65,6 +65,20 @@ function changeAppTheme(themeName: string){
             border: '#b6b6b6',
             foreground: '#000000',
         },
+
+        "gruvbox-dark": {
+            background: '#242424',
+            tile: '#282828',
+            border: '#555555',
+            foreground: '#A89984',
+        },
+
+        "gruvbox-light": {
+            background: '#e1d8b2',
+            tile: '#FBF1C7',
+            border: '#999999',
+            foreground: '#7C6F64',
+        },
     }
 
     let appContainer: HTMLDivElement = document.querySelector('#app');
