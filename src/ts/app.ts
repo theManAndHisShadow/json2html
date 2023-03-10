@@ -66,6 +66,20 @@ function changeAppTheme(themeName: string){
             foreground: '#000000',
         },
 
+        "github-light": {
+            background: '#e7e7e7',
+            tile: '#ffffff',
+            border: '#b6b6b6',
+            foreground: '#000000',
+        },
+
+        "github-dark": {
+            background: '#262b30',
+            tile: '#2f363d',
+            border: '#616161',
+            foreground: '#ffffff',
+        },
+
         "gruvbox-dark": {
             background: '#242424',
             tile: '#282828',
@@ -87,6 +101,23 @@ function changeAppTheme(themeName: string){
             foreground: '#adb2bc',
         },
     }
+
+    // a
+    const a = {
+        aaa: true,
+        b: 1,
+        string: "Hello world!",
+        link: "https://www.freedesktop.org/wiki/",
+        number: 42,
+        negativeNumber: -1,
+        floatNumber: 3.1415926535,
+        boolean: true,
+        isUndefined: "undefined",
+        d: {
+            a: 1,
+        },
+
+    };
 
     let appContainer: HTMLDivElement = document.querySelector('#app');
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
