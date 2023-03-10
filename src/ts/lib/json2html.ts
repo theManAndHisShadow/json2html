@@ -56,7 +56,17 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
     propertyName.classList.add('json2html-key');
     
     let value = document.createElement('span');
-    value.textContent = wrapValue(params.itemValue);
+    
+    if(typeof params.itemValue === 'number' && params.itemValue < 0){
+        let minusSign = document.createElement('span');
+        minusSign.classList.add('json2html-value__minus-sign');
+        minusSign.textContent = '-';
+
+        value.appendChild(minusSign);
+        value.innerHTML += (Math.abs(params.itemValue));
+    } else {
+        value.textContent = wrapValue(params.itemValue);
+    }
 
     // show browser tooltip at primitive key value on hover
     if(params.showTypeOnHover === true) {

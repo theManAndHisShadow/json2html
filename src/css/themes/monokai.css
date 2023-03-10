@@ -40,3 +40,7 @@
 .json2html-type__object {
     color: #66D9EF;
 }
+
+.json2html-value__minus-sign {
+    color: #f92672;
+}

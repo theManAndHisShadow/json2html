@@ -43,3 +43,7 @@
 .json2html-uncollapse-all:hover {
     opacity: 0.4;
 }
+
+.json2html-value__minus-sign {
+    color: #b44343;
+}
