@@ -33,7 +33,11 @@
 }
 
 #app__controls label {
-    font-size: 12px;
+    font-size: 14px;
+}
+
+#app__controls select {
+    cursor: pointer;
 }
 
 
