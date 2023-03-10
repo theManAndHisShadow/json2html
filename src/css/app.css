@@ -17,7 +17,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50.1%, -50.1%);
+    transform: translate(-50.1%, -50.2%);
     margin: 5px 0px;
     padding: 10px 15px;
     border-radius: 5px;
@@ -38,6 +38,9 @@
 
 #app__controls select {
     cursor: pointer;
+    padding: 2px 3px;
+    border-radius: 3px;
+    border: 1px solid #2c3339;
 }
 
 

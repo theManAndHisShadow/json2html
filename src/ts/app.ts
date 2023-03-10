@@ -129,19 +129,25 @@ function changeAppTheme(themeName: string){
     let appContainer: HTMLDivElement = document.querySelector('#app');
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     let appControls: HTMLDivElement = document.querySelector('#app__controls');
+    let themeSelector: HTMLSelectElement = document.querySelector('#app__controls select');
     let outputContainer: HTMLDivElement = document.querySelector('#app__output');
 
     appContainer.style.background = themes[themeName].background;
 
     textArea.style.background = themes[themeName].tile;
     outputContainer.style.background = themes[themeName].tile;
+    outputContainer.style.background = themes[themeName].tile;
+    themeSelector.style.background = themes[themeName].tile;
+    
     
     appControls.style.color = themes[themeName].foreground;
     textArea.style.color = themes[themeName].foreground;
     outputContainer.style.color = themes[themeName].foreground;
+    themeSelector.style.color = themes[themeName].foreground;
 
     textArea.style.borderColor = themes[themeName].border;
     outputContainer.style.borderColor = themes[themeName].border;
+    themeSelector.style.borderColor = themes[themeName].border;
 }
 
 
