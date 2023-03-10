@@ -383,9 +383,17 @@ function injectThemeCSS(themeName: string){
     }
 }
 
+type ErrorHandler = (error: Error) => void
 
-
-export function json2html(params: {json: string, renderNestedLength?: boolean, highlightLinks?: boolean, collapseAll?: boolean, showTypeOnHover?: boolean, theme?: string}){
+export function json2html(params: {
+    json: string, 
+    renderNestedLength?: boolean, 
+    highlightLinks?: boolean, 
+    collapseAll?: boolean, 
+    showTypeOnHover?: boolean, 
+    theme?: string,
+    onError?:ErrorHandler,
+}){
     // if renderNestedLength param not given - pass true
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
@@ -395,15 +403,20 @@ export function json2html(params: {json: string, renderNestedLength?: boolean, h
 
     injectThemeCSS(params.theme);
 
-    let parsed = JSON.parse(params.json);
-    let rendered = render({
-        parsedJSON: {json: parsed},
-        renderNestedLength: params.renderNestedLength,
-        highlightLinks: params.highlightLinks,
-        collapseAll: params.collapseAll,
-        showTypeOnHover: params.showTypeOnHover,
-    });
-
-    console.log(params, rendered.parentElement);
-    return rendered;
+    // Wrapping JSON.parse call in trycatch
+    try {
+        let parsed = JSON.parse(params.json);
+        let rendered = render({
+            parsedJSON: {json: parsed},
+            renderNestedLength: params.renderNestedLength,
+            highlightLinks: params.highlightLinks,
+            collapseAll: params.collapseAll,
+            showTypeOnHover: params.showTypeOnHover,
+        });
+        
+        return rendered;
+    } catch (error) {
+        // Invoking params.onError for error handling 
+        params.onError(error);
+    }
 }
