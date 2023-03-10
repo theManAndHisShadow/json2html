@@ -66,6 +66,13 @@ function changeAppTheme(themeName: string){
             foreground: '#000000',
         },
 
+        horizon: {
+            background: '#ded5cc',
+            tile: '#ffffff',
+            border: '#b6b6b6',
+            foreground: '#2f2f2f',
+        },
+
         "github-light": {
             background: '#e7e7e7',
             tile: '#ffffff',
