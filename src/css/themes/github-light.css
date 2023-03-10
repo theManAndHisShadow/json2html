@@ -3,7 +3,7 @@
 }
 
 .json2html-key {
-    color: black;
+    color: #25292f;
 }
 
 .json2html-spoiler-trigger--collapsed,
@@ -20,12 +20,12 @@
 }
 
 .json2html-type__string {
-    color: #032f62;
+    color: #0a3069;
 }
 
 .json2html-type__string a, 
 .json2html-type__string a:visited {
-    color: #032f62;
+    color: #0a3069;
 }
 
 .json2html-type__null {

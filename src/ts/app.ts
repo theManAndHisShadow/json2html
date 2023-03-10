@@ -69,15 +69,15 @@ function changeAppTheme(themeName: string){
         "github-light": {
             background: '#e7e7e7',
             tile: '#ffffff',
-            border: '#b6b6b6',
-            foreground: '#000000',
+            border: '#cacdd1',
+            foreground: '#25292f',
         },
 
         "github-dark": {
-            background: '#262b30',
-            tile: '#2f363d',
-            border: '#616161',
-            foreground: '#ffffff',
+            background: '#10161d',
+            tile: '#0d1117',
+            border: '#30373d',
+            foreground: '#c9d1d9',
         },
 
         "gruvbox-dark": {
