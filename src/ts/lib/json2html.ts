@@ -1,5 +1,5 @@
 import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent } from './helpers';
-
+import { updateThemeCSS } from './themes';
 
 /**
  * Checks given value type and returns CSS class name for it.
@@ -119,12 +119,12 @@ function hasNestedItems(targetItem: any){
  * @param spoiler target spoiler, that affects to collapse buttons text contents
  * @param collapseButton Target collapse button. An optional argument. If empty, the function will itself look for a button
  */
-function updateCollapseButton(spoiler: Element, collapseButton?: Element){
-    let collapseButtonClassName = 'json2html-collapse-all-trigger';
+function updateCollapseToggle(spoiler: Element, collapseButton?: Element){
+    let collapseButtonClassName = 'json2html-collapse-all-toggle';
     collapseButton = collapseButton || spoiler.parentElement.querySelector(`.${collapseButtonClassName}`);
 
-    let triggerState = spoiler.className.split('--')[1];
-    let action = triggerState == "uncollapsed" ? "collapse" : "uncollapse";
+    let toggleState = spoiler.className.split('--')[1];
+    let action = toggleState == "uncollapsed" ? "collapse" : "uncollapse";
     if(collapseButton) collapseButton.textContent = `(${action} all)`
 }
 
@@ -135,13 +135,13 @@ function updateCollapseButton(spoiler: Element, collapseButton?: Element){
  * @param params 
  */
 function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Element, collapsed: boolean, nestedObject: any}){
-    let collapseButtonClassName = 'json2html-collapse-all-trigger';
+    let collapseButtonClassName = 'json2html-collapse-all-toggle';
     let isExist = params.renderIn.querySelector(`${collapseButtonClassName}`);
     let collapseAllNestedBtn = isExist || document.createElement('span');
     if(!isExist) collapseAllNestedBtn.className = collapseButtonClassName;
     
     // initial button element update
-    updateCollapseButton(params.targetSpoiler, collapseAllNestedBtn);
+    updateCollapseToggle(params.targetSpoiler, collapseAllNestedBtn);
 
     // on click emulate clicking at spoiler buttons c:
     collapseAllNestedBtn.addEventListener('click', event => {
@@ -151,7 +151,7 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
         sploilers.forEach(spoiler => {
             emulateEvent(spoiler, 'click');
 
-            updateCollapseButton(spoiler);
+            updateCollapseToggle(spoiler);
         });
 
     });
@@ -188,10 +188,10 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
 
     // collapsin at start (or not)
     if(params.collapseAll === true){
-        spoilerBtn.classList.add('json2html-spoiler-trigger--collapsed');
+        spoilerBtn.classList.add('json2html-spoiler-toggle--collapsed');
         renderedNested.setAttribute('hidden', '');
     } else {
-        spoilerBtn.classList.add('json2html-spoiler-trigger--uncollapsed');
+        spoilerBtn.classList.add('json2html-spoiler-toggle--uncollapsed');
     }
 
     let parentPropertyName = document.createElement('span');
@@ -210,8 +210,8 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
             parentPropertyName, 
             typeSignature
         ], 'click', event => {
-            let collapsed = 'json2html-spoiler-trigger--collapsed';
-            let uncollapsed = 'json2html-spoiler-trigger--uncollapsed';
+            let collapsed = 'json2html-spoiler-toggle--collapsed';
+            let uncollapsed = 'json2html-spoiler-toggle--uncollapsed';
     
             // toggle nested object
             if(spoilerBtn.classList.contains(collapsed)) {
@@ -224,7 +224,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
                 renderedNested.setAttribute('hidden', '');
             };
     
-            updateCollapseButton(spoilerBtn);
+            updateCollapseToggle(spoilerBtn);
         });
     }
 
@@ -325,31 +325,6 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
 
 
 
-/**
- * Injects theme style from css/themes folder to head tag.
- * @param themeName name of theme css file
- */
-function injectThemeCSS(themeName: string){
-    const filePath = `css/themes/${themeName}.css`;
-    const style = document.head.querySelector('[data-style-origin="json2html"]');
-    const styleIsNotExist = !style;
-
-    // add new stylesheet only once
-    if(styleIsNotExist) {
-        const newStyleElement = document.createElement('link');
-        newStyleElement.setAttribute('rel', 'stylesheet');
-        newStyleElement.setAttribute('data-style-origin', 'json2html');
-        newStyleElement.setAttribute('href', filePath);
-        document.head.appendChild(newStyleElement);
-    } else {
-        const isDifferentPath = style.getAttribute('href') !== filePath;
-        
-        // change href attr only is new theme
-        if(isDifferentPath) style.setAttribute('href', filePath);
-    }
-}
-
-
 // define some types
 type ErrorHandler = (error: Error) => void
 /**
@@ -379,9 +354,10 @@ export function json2html(params: {
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
-    params.theme = params.theme || 'dracula';
+    params.theme = params.theme || 'andromeda';
 
-    injectThemeCSS(params.theme);
+    // update json2html style tag at start
+    updateThemeCSS(params.theme);
 
     // Wrapping JSON.parse call in trycatch
     try {

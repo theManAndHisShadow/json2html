@@ -14,7 +14,7 @@
     margin-top: 2px;
 }
 
-.json2html-spoiler-trigger--collapsed {
+.json2html-spoiler-toggle--collapsed {
     display: inline-block;
     margin-right: -7px;
     position: relative;
@@ -24,7 +24,7 @@
     transition: 0.3s ease;
 }
 
-.json2html-spoiler-trigger--uncollapsed {
+.json2html-spoiler-toggle--uncollapsed {
     display: inline-block;
     margin-right: -7px;
     position: relative;
@@ -46,25 +46,14 @@
     font-style: italic;
 }
 
-
-.json2html-spoiler-trigger--uncollapsed:hover ~ .json2html-collapse-all-trigger,
-.json2html-key:hover ~ .json2html-collapse-all-trigger,
-.json2html-type__array:hover ~ .json2html-collapse-all-trigger,
-.json2html-type__object:hover ~ .json2html-collapse-all-trigger,
-.json2html-collapse-all-trigger:hover,
-.json2html-uncollapse-all:hover {
-    opacity: 0.1;
-}
-
-.json2html-collapse-all-trigger:hover {
+.json2html-collapse-all-toggle:hover {
     text-decoration: underline;
 }
 
-.json2html-collapse-all-trigger {
+.json2html-collapse-all-toggle {
     opacity: 0;
     position: relative;
     padding-left: 10px;
-    color: white;
     transition: 0.3s ease;
 }
 
@@ -76,4 +65,13 @@
 .json2html-container:first-child {
     margin-left: 0px;
     padding-left: 15px;
+}
+
+.json2html-spoiler-toggle--uncollapsed:hover ~ .json2html-collapse-all-toggle,
+.json2html-key:hover ~ .json2html-collapse-all-toggle,
+.json2html-type__array:hover ~ .json2html-collapse-all-toggle,
+.json2html-type__object:hover ~ .json2html-collapse-all-toggle,
+.json2html-collapse-all-toggle:hover,
+.json2html-uncollapse-all:hover {
+    opacity: 0.5;
 }
