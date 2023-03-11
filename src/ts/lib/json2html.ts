@@ -1,7 +1,4 @@
-// define some types
-type ErrorHandler = (error: Error) => void
-type EventCallbackHandler = (event: Event) => void
-
+import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent } from './helpers';
 
 
 /**
@@ -32,17 +29,6 @@ function wrapValue(value: any){
     if(isString) wrapped = `"${value}"`;
 
     return wrapped;
-}
-
-
-
-/**
- * Checks if given string is a link.
- * @param target string to check
- * @returns 
- */
-function isLink(target: string){
-    return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/.test(target);
 }
 
 
@@ -110,35 +96,6 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
 
 
 /**
- * Emulates event by eventType on target element.
- * @param target event target
- * @param evenType event trigger type, for example "click"
- */
-function emulateEvent(target: Element, evenType: string){
-    let evObj = document.createEvent('Events');
-    evObj.initEvent(evenType, true, false);
-    target.dispatchEvent(evObj);
-}
-
-
-
-/**
- * Adds multiple event handlers
- * @param targets array of targets
- * @param evenType event type
- * @param callback callback function with access to event instance
- */
-function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: string, callback: EventCallbackHandler){
-    targets.forEach(target => {
-        target.addEventListener(evenType, event => {
-            callback(event);
-        });
-    });
-}
-
-
-
-/**
  * Checks the presence of nested elements.
  * @param targetItem parent item to check
  * @returns 
@@ -148,7 +105,7 @@ function hasNestedItems(targetItem: any){
     
     Object.values(targetItem).forEach(targetItem => {
         if(targetItem !== null){
-            if(targetItem.constructor.name === "Object" || targetItem.constructor.name === "Array") result = true;
+            if(isObject(targetItem) || isArray(targetItem)) result = true;
         }
     });
 
@@ -275,17 +232,15 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
     constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
 
     // only for Array items
-    let isArray = params.itemValue.constructor.name === "Array";
-    let isObject = params.itemValue.constructor.name === "Object";
     if(params.renderNestedLength === true) {
-        if(isArray) {
+        if(isArray(params.itemValue)) {
             let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
             let word = length == "empty" 
                     ? "" : length == 1 
                         ? ' item' : " items";
     
             typeSignature.textContent += ` (${length}${word})`;
-        } else if(isObject && Object.keys(params.itemValue).length === 0){
+        } else if(isObject(params.itemValue) && Object.keys(params.itemValue).length === 0){
             typeSignature.textContent += ` (empty)`;
         }
     }
@@ -334,12 +289,8 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
     
     // render per key
     keys.forEach(key => {
-        let isNotNull = params.parsedJSON[key] !== null;
-        let isObject = isNotNull && params.parsedJSON[key].constructor.name === "Object";
-        let isArray = isNotNull && params.parsedJSON[key].constructor.name === "Array";
-
         // if key has complex value - use renderComplexItem()
-        if(isNotNull && isObject || isArray) {
+        if(isArray(params.parsedJSON[key]) || isObject(params.parsedJSON[key])) {
             let nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
@@ -399,7 +350,8 @@ function injectThemeCSS(themeName: string){
 }
 
 
-
+// define some types
+type ErrorHandler = (error: Error) => void
 /**
  * Renders JSON string in colored and formatted HTML block.
  * @param params.json JSON string to render
