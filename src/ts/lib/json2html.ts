@@ -1,3 +1,7 @@
+// define some types
+type ErrorHandler = (error: Error) => void
+type EventCallbackHandler = (event: Event) => void
+
 /**
  * Checks given value type and returns CSS class name for it.
  * @param value 
@@ -115,7 +119,6 @@ function emulateEvent(target: Element, evenType: string){
 
 
 
-type EventCallbackHandler = (event: Event) => void
 /**
  * Adds multiple event handlers
  * @param targets array of targets
@@ -383,7 +386,7 @@ function injectThemeCSS(themeName: string){
     }
 }
 
-type ErrorHandler = (error: Error) => void
+
 
 export function json2html(params: {
     json: string, 
