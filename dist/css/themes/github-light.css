@@ -1,49 +1,4 @@
-.json2html-container {
-    background: #ffffff;
-}
 
-.json2html-key {
-    color: #25292f;
-}
-
-.json2html-spoiler-trigger--collapsed,
-.json2html-spoiler-trigger--uncollapsed {
-    color: #afafaf;
-}
-
-.json2html-type__boolean {
-    color: #6f42c1;
-}
-
-.json2html-type__number {
-    color: #005cc5;
-}
-
-.json2html-type__string {
-    color: #0a3069;
-}
-
-.json2html-type__string a, 
-.json2html-type__string a:visited {
-    color: #0a3069;
-}
-
-.json2html-type__null {
-    color: #6a737d;
-}
-
-.json2html-type__undefined {
-    color: #005cc5;
-} 
-
-.json2html-type__array,
-.json2html-type__object {
-    color: #005cc5;
-}
-
-.json2html-collapse-all-trigger {
-    color: #6a737d;
-}
 
 .json2html-spoiler-trigger--uncollapsed:hover ~ .json2html-collapse-all-trigger,
 .json2html-key:hover ~ .json2html-collapse-all-trigger,
