@@ -82,6 +82,10 @@ const themes:Collection= {
 }
 
 
+
+/**
+ * Load all available theme files on document loading start.
+ */
 function preloadThemeFiles(){
     let allThemeNames = Object.keys(themes);
 
