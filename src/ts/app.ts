@@ -119,6 +119,10 @@ function getSelectedThemeName(){
 function changeAppTheme(themeName: string){
     let themeColors = themes[themeName];
 
+    let appLogo: HTMLDivElement = document.querySelector('#app__logo');
+    let appLogo_jsonWord = appLogo.children[0] as HTMLSpanElement;
+    let appLogo_delimiter = appLogo.children[1] as HTMLSpanElement;
+    let appLogo_htmlWord = appLogo.children[2] as HTMLSpanElement;
     let appContainer: HTMLDivElement = document.querySelector('#app');
     let appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
     let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
@@ -127,6 +131,7 @@ function changeAppTheme(themeName: string){
     let outputContainer: HTMLDivElement = document.querySelector('#app__output');
 
     appContainer.style.background = themeColors.background;
+    appLogo_htmlWord.style.color = themeColors.background;
 
     textArea.style.background = themeColors.tile;
     appInput.style.background = themeColors.tile;
@@ -135,6 +140,8 @@ function changeAppTheme(themeName: string){
     themeSelector.style.background = themeColors.tile;
     
     
+    appLogo_jsonWord.style.color = themeColors.foreground;
+    appLogo_delimiter.style.color = themeColors.foreground;
     appControls.style.color = themeColors.foreground;
     textArea.style.color = themeColors.foreground;
     outputContainer.style.color = themeColors.foreground;

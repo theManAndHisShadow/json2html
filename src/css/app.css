@@ -12,6 +12,55 @@
     height: 100%;
 }
 
+#app__logo {
+    position: relative;
+    left: 25px;
+    font-size: 45px;
+    color: white;
+    cursor: pointer;
+}
+
+#app__logo span:nth-child(1) {
+    font-family: 'Satisfy', sans-serif;
+}
+
+#app__logo span:nth-child(2) {
+    font-style: italic;
+    margin-left: -7px;
+    margin-right: -9px;
+}
+
+#app__logo span:nth-child(3) {
+    font-family: 'Kanit', sans-serif;
+    
+    /* experimental functions */
+    -webkit-background-clip: text;
+    -webkit-text-stroke-width: 5px;
+
+    background-image: linear-gradient(to right, #09f1b8, #00a2ff, #ff00d2, #fed90f);
+    color: #21232c;
+    -webkit-text-stroke-color: transparent;
+    letter-spacing: 4px;
+    background-position-x: 0px;
+    animation: slide-gradient 1s infinite linear;
+    animation-play-state: paused;
+    position: relative;
+    bottom: 2px;
+}
+
+@keyframes slide-gradient {
+    from {
+        background-position-x: 0px;
+    }
+
+    to {
+        background-position-x: 110px;
+    }
+}
+
+#app__logo:hover span:nth-child(3){
+    animation-play-state: running;
+}
 
 #app__main-block {
     position: absolute;
