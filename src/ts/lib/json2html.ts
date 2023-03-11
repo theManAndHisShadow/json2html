@@ -2,6 +2,8 @@
 type ErrorHandler = (error: Error) => void
 type EventCallbackHandler = (event: Event) => void
 
+
+
 /**
  * Checks given value type and returns CSS class name for it.
  * @param value 
@@ -61,6 +63,7 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
     
     let value = document.createElement('span');
     
+    // if it`s a negative number - render "minus sign"
     if(typeof params.itemValue === 'number' && params.itemValue < 0){
         let minusSign = document.createElement('span');
         minusSign.classList.add('json2html-value__minus-sign');
@@ -315,21 +318,27 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
 
 
 /**
- * 
- * @param parsedJSON 
- * @returns 
+ * Renders entire object tree into HTML tags and nodes.
+ * @param parsedJSON regular object, parsed JSON object
+ * @returns fully ready HTMLDivElement
  */
 function render(params: {parsedJSON: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
     let keys = Object.keys(params.parsedJSON);
+
+    // rendered child nodes
     let siblings: any[] = [];
+
+    // result node
     let rendered: HTMLDivElement = document.createElement('div');
     rendered.classList.add('json2html-container');
     
+    // render per key
     keys.forEach(key => {
         let isNotNull = params.parsedJSON[key] !== null;
         let isObject = isNotNull && params.parsedJSON[key].constructor.name === "Object";
         let isArray = isNotNull && params.parsedJSON[key].constructor.name === "Array";
 
+        // if key has complex value - use renderComplexItem()
         if(isNotNull && isObject || isArray) {
             let nestedElement = renderComplexItem({
                 keyName: key,
@@ -341,6 +350,8 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
            });
             
             siblings.push(nestedElement);
+
+        // if key has primitive value - use renderPrimitiveItem()
         } else {
             let element = renderPrimitiveItem({
                 keyName: key,
@@ -348,11 +359,12 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
                 highlightLinks: params.highlightLinks,
                 showTypeOnHover: params.showTypeOnHover,
             });
-
+            
             siblings.push(element);
         }
     });
 
+    // make tree
     siblings.forEach(node => {
         rendered.appendChild(node);
     });
@@ -388,6 +400,19 @@ function injectThemeCSS(themeName: string){
 
 
 
+/**
+ * Renders JSON string in colored and formatted HTML block.
+ * @param params.json JSON string to render
+ * @param params.renderNestedLength Allows render Array length in Array type signature. By default - true.
+ * @param params.highlightLinks Allows render url string as <a> clickable tag. By default - true.
+ * @param params.collapseAll On true value - renders HTML block at start with minimized (collapsed) content. By default - true.
+ * @param params.showTypeOnHover On true value - show default html "title" tooltip on primitive values with their type. By default - true.
+ * @param params.theme Renders HTML block with given theme. By default uses "dracula" theme. 
+ * Supports 9 themes: andromeda, daylight, dracula, gruvbox-dark, gruvbox-light, github-light, github-dark, horizon, monokai. 
+ * Also supports user themes. For more info check project`s github mini wiki.
+ * @param params.onError error handler callback function, gives access to Error instance.
+ * @returns 
+ */
 export function json2html(params: {
     json: string, 
     renderNestedLength?: boolean, 
@@ -397,12 +422,12 @@ export function json2html(params: {
     theme?: string,
     onError?:ErrorHandler,
 }){
-    // if renderNestedLength param not given - pass true
+    // default values
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
-    params.theme = params.theme || 'default';
+    params.theme = params.theme || 'dracula';
 
     injectThemeCSS(params.theme);
 
