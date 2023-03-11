@@ -818,7 +818,6 @@ function generateCSSCode(themeName: string){
     `;
         
     const theme = getThemeProperies(themeName);
-    console.log(theme, themeName);
     const elements = Object.keys(theme);
 
 
