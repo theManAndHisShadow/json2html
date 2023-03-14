@@ -54,7 +54,7 @@ type EventCallbackHandler = (event: Event) => void
  * @param evenType event trigger type, for example "click"
  */
 export function emulateEvent(target: Element, evenType: string){
-    let evObj = document.createEvent('Events');
+    const evObj = document.createEvent('Events');
     evObj.initEvent(evenType, true, false);
     target.dispatchEvent(evObj);
 }

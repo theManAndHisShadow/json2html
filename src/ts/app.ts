@@ -442,7 +442,7 @@ function getAppThemeProperies(themeName: string){
  * @returns theme name
  */
 function getSelectedThemeName(){
-    let themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
+    const themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
 
     return themeSelector.value;
 }
@@ -468,13 +468,14 @@ function updateAppTheme(themeName: string){
  * @param message error message
  */
 function toggleErrorMessage(state: boolean, message?: string){
-    let errorMessageConainer:HTMLDivElement = document.querySelector('#app__error-message');
-    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    const errorMessageConainer:HTMLDivElement = document.querySelector('#app__error-message');
+    const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
 
     if(state === true) {
-        let errorMessage = `[Error! ${message}]:`;
-        let themeName = getSelectedThemeName();
-        let themeColors = getAppThemeProperies(themeName);
+        const errorMessage = `[Error! ${message}]:`;
+        const themeName = getSelectedThemeName();
+        const themeColors = getAppThemeProperies(themeName);
+
         errorMessageConainer.textContent = errorMessage;
         errorMessageConainer.style.display = 'initial';
         errorMessageConainer.style.color = themeColors.error.properties.color;
@@ -493,7 +494,7 @@ function toggleErrorMessage(state: boolean, message?: string){
  * @param newOutput 
  */
 function updateOutput(newOutput: HTMLDivElement){
-    let output = document.querySelector('#app__output');
+    const output = document.querySelector('#app__output');
 
     output.children.length == 0 
         ? output.appendChild(newOutput) 
@@ -507,9 +508,9 @@ function updateOutput(newOutput: HTMLDivElement){
  * @param text 
  */
 function renderText(text: string){
-    let themeName = getSelectedThemeName();
+    const themeName = getSelectedThemeName();
 
-    let formatted = json2html({
+    const formatted = json2html({
         json: text,
         collapseAll: false,
         showTypeOnHover: true,
@@ -534,13 +535,13 @@ function renderText(text: string){
 
 
 function init(){
-    let defaultJSONString = `{
+    const defaultJSONString = `{
     "string":"Hello world!", "paragraph":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo?", "link":"https://www.freedesktop.org/wiki/","number":42, "negativeNumber": -1,"floatNumber":3.1415926535,"boolean":true, "isNull": null, "isUndefined": "undefined", "emptyArray": [], "emptyObject": {}, "arrayOfNumbers": [1, 2, 3, 4, 5], "arrayOfObjects": [{"id": 1, "profileType":"public","blocked": false}, {"id":2, "profileType":"private", "blocked": true}, {"id": 3, "profileType":"private", "blocked": false}], "superNested": { "level1": {"level2": {"level3": {"level4":{"level5":{"level6":"Btw I use Arch"}}}}}}
 }`;
 
-    let appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
-    let themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
-    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    const appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
+    const themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
+    const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
    
     // render on init
@@ -548,7 +549,7 @@ function init(){
 
     // emulate textarea focusing
     appInput.addEventListener('click', event => {
-        let target: HTMLElement = event.target as HTMLElement;
+        const target: HTMLElement = event.target as HTMLElement;
 
         // if event target is not text area
         if(target.tagName !== 'TEXTAREA') {

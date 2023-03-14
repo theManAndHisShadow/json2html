@@ -17,7 +17,7 @@ export interface ThemesLibrary {
  * @returns CSS props object {selector: string, props: {cssProp:value}}
  */
 function getThemeProperies(themeName: string){
-    let themes:ThemesLibrary = {
+    const themes:ThemesLibrary = {
         andromeda: {
             container: {
                 selector: '.json2html-container',
@@ -842,10 +842,8 @@ export function generateCSSCode(themeObject: any){
  * @param themeName name of theme
  */
 export function updateThemeCSS(cssCode: string, dataMarker: string){
-
     // Checks if style tag already exists
     const themeCSS = document.head.querySelector(dataMarker); //'[data-style-origin="json2html"]'
-
 
     // if exist
     if(themeCSS){
@@ -863,6 +861,7 @@ export function updateThemeCSS(cssCode: string, dataMarker: string){
         document.head.appendChild(style);
     }
 }
+
 
 
 export function updateTheme(themeName: string){

@@ -1,14 +1,16 @@
 import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent } from './helpers';
 import { updateTheme } from './themes';
 
+
+
 /**
  * Checks given value type and returns CSS class name for it.
  * @param value 
  * @returns CSS class name, for example: "json2html-type__boolean"
  */
 function getValueTypeClassName(value: any){
-    let classNameSample = 'json2html-type__';
-    let type = value == null || value == "undefined" ? value : typeof value;
+    const classNameSample = 'json2html-type__';
+    const type = value == null || value == "undefined" ? value : typeof value;
 
     return classNameSample + type;
 }
@@ -21,10 +23,10 @@ function getValueTypeClassName(value: any){
  * @returns prepared value
  */
 function wrapValue(value: any){
-    let isString = typeof value == 'string';
-    let isNull = value == null;
+    const isString = typeof value == 'string';
+    const isNull = value == null;
+    
     let wrapped = value;
-
     if(isNull) wrapped = `${value}`;
     if(isString) wrapped = `"${value}"`;
 
@@ -40,18 +42,18 @@ function wrapValue(value: any){
  * @returns ready for other manipulations HTML Node.
  */
 function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlightLinks: boolean,  showTypeOnHover: boolean}){
-    let element = document.createElement('div');
+    const element = document.createElement('div');
     element.classList.add('json2html-pair');
     
-    let propertyName = document.createElement('span');
+    const propertyName = document.createElement('span');
     propertyName.textContent = params.keyName + ": ";
     propertyName.classList.add('json2html-key');
     
-    let value = document.createElement('span');
+    const value = document.createElement('span');
     
     // if it`s a negative number - render "minus sign"
     if(typeof params.itemValue === 'number' && params.itemValue < 0){
-        let minusSign = document.createElement('span');
+        const minusSign = document.createElement('span');
         minusSign.classList.add('json2html-value__minus-sign');
         minusSign.textContent = '-';
 
@@ -75,7 +77,7 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
 
     // insert link if highlightLinks is true and string is link
     if(params.highlightLinks === true && isLink(params.itemValue)) {
-        let link = document.createElement('a');
+        const link = document.createElement('a');
         link.setAttribute('target', '_blank');
         link.href = params.itemValue;
         link.textContent = `"${params.itemValue}"`;
@@ -120,11 +122,11 @@ function hasNestedItems(targetItem: any){
  * @param collapseButton Target collapse button. An optional argument. If empty, the function will itself look for a button
  */
 function updateCollapseToggle(spoiler: Element, collapseButton?: Element){
-    let collapseButtonClassName = 'json2html-collapse-all-toggle';
+    const collapseButtonClassName = 'json2html-collapse-all-toggle';
     collapseButton = collapseButton || spoiler.parentElement.querySelector(`.${collapseButtonClassName}`);
 
-    let toggleState = spoiler.className.split('--')[1];
-    let action = toggleState == "uncollapsed" ? "collapse" : "uncollapse";
+    const toggleState = spoiler.className.split('--')[1];
+    const action = toggleState == "uncollapsed" ? "collapse" : "uncollapse";
     if(collapseButton) collapseButton.textContent = `(${action} all)`
 }
 
@@ -135,9 +137,9 @@ function updateCollapseToggle(spoiler: Element, collapseButton?: Element){
  * @param params 
  */
 function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Element, collapsed: boolean, nestedObject: any}){
-    let collapseButtonClassName = 'json2html-collapse-all-toggle';
-    let isExist = params.renderIn.querySelector(`${collapseButtonClassName}`);
-    let collapseAllNestedBtn = isExist || document.createElement('span');
+    const collapseButtonClassName = 'json2html-collapse-all-toggle';
+    const isExist = params.renderIn.querySelector(`${collapseButtonClassName}`);
+    const collapseAllNestedBtn = isExist || document.createElement('span');
     if(!isExist) collapseAllNestedBtn.className = collapseButtonClassName;
     
     // initial button element update
@@ -146,7 +148,7 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
     // on click emulate clicking at spoiler buttons c:
     collapseAllNestedBtn.addEventListener('click', event => {
         // get all spoilers button on that tree branch
-        let sploilers = params.renderIn.querySelectorAll('.' + params.targetSpoiler.className);
+        const sploilers = params.renderIn.querySelectorAll('.' + params.targetSpoiler.className);
         
         sploilers.forEach(spoiler => {
             emulateEvent(spoiler, 'click');
@@ -169,9 +171,9 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
  * @returns ready for other manipulations HTML Node.
  */
 function renderComplexItem(params: {keyName: string, itemValue: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
-    let nestedObject = params.itemValue;
+    const nestedObject = params.itemValue;
 
-    let renderedNested = render({
+    const renderedNested = render({
         parsedJSON: nestedObject,
         renderNestedLength: params.renderNestedLength,
         highlightLinks: params.highlightLinks,
@@ -180,10 +182,10 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
     });
     renderedNested.classList.add('json2html-nested-value')
 
-    let nestedElement = document.createElement('div');
+    const nestedElement = document.createElement('div');
     nestedElement.classList.add('json2html-complex-pair');
 
-    let spoilerBtn = document.createElement('span');
+    const spoilerBtn = document.createElement('span');
     spoilerBtn.textContent = '▶';
 
     // collapsin at start (or not)
@@ -194,11 +196,11 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
         spoilerBtn.classList.add('json2html-spoiler-toggle--uncollapsed');
     }
 
-    let parentPropertyName = document.createElement('span');
+    const parentPropertyName = document.createElement('span');
     parentPropertyName.textContent = params.keyName + ": ";
     parentPropertyName.classList.add('json2html-key');
 
-    let typeSignature = document.createElement('span');
+    const typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
 
 
@@ -210,8 +212,8 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
             parentPropertyName, 
             typeSignature
         ], 'click', event => {
-            let collapsed = 'json2html-spoiler-toggle--collapsed';
-            let uncollapsed = 'json2html-spoiler-toggle--uncollapsed';
+            const collapsed = 'json2html-spoiler-toggle--collapsed';
+            const uncollapsed = 'json2html-spoiler-toggle--uncollapsed';
     
             // toggle nested object
             if(spoilerBtn.classList.contains(collapsed)) {
@@ -228,14 +230,16 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
         });
     }
 
-    let constructorName = params.itemValue.constructor.name;
-    constructorName = constructorName[0].toLowerCase() + constructorName.slice(1);
+    let rawConstructorName = params.itemValue.constructor.name;
+    let rawConstructorName__firstLetter = rawConstructorName[0].toLowerCase();
+    let rawConstructorName__otherLetters = rawConstructorName.slice(1);
+    const constructorName =  rawConstructorName__firstLetter + rawConstructorName__otherLetters;
 
     // only for Array items
     if(params.renderNestedLength === true) {
         if(isArray(params.itemValue)) {
-            let length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
-            let word = length == "empty" 
+            const length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
+            const word = length == "empty" 
                     ? "" : length == 1 
                         ? ' item' : " items";
     
@@ -278,20 +282,20 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
  * @returns fully ready HTMLDivElement
  */
 function render(params: {parsedJSON: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
-    let keys = Object.keys(params.parsedJSON);
+    const keys = Object.keys(params.parsedJSON);
 
     // rendered child nodes
-    let siblings: any[] = [];
+    const siblings: any[] = [];
 
     // result node
-    let rendered: HTMLDivElement = document.createElement('div');
+    const rendered: HTMLDivElement = document.createElement('div');
     rendered.classList.add('json2html-container');
     
     // render per key
     keys.forEach(key => {
         // if key has complex value - use renderComplexItem()
         if(isArray(params.parsedJSON[key]) || isObject(params.parsedJSON[key])) {
-            let nestedElement = renderComplexItem({
+            const nestedElement = renderComplexItem({
                 keyName: key,
                 itemValue: params.parsedJSON[key],
                 renderNestedLength: params.renderNestedLength,
@@ -304,7 +308,7 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
 
         // if key has primitive value - use renderPrimitiveItem()
         } else {
-            let element = renderPrimitiveItem({
+            const element = renderPrimitiveItem({
                 keyName: key,
                 itemValue:  params.parsedJSON[key],
                 highlightLinks: params.highlightLinks,
@@ -362,8 +366,8 @@ export function json2html(params: {
 
     // Wrapping JSON.parse call in trycatch
     try {
-        let parsed = JSON.parse(params.json);
-        let rendered = render({
+        const parsed = JSON.parse(params.json);
+        const rendered = render({
             parsedJSON: {json: parsed},
             renderNestedLength: params.renderNestedLength,
             highlightLinks: params.highlightLinks,
