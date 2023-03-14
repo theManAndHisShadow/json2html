@@ -48,9 +48,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#ee5d44',
+                    color: '#ee5d44 !important',
                 }
             },
         },
@@ -95,9 +95,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf0404',
+                    color: '#bf0404 !important',
                 }
             },
         },
@@ -142,9 +142,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf0404',
+                    color: '#bf0404 !important',
                 }
             },
         },
@@ -189,9 +189,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf0404',
+                    color: '#bf0404 !important',
                 }
             },
         },
@@ -236,9 +236,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf0404',
+                    color: '#bf0404 !important',
                 }
             },
         },
@@ -283,9 +283,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#cd3c3c',
+                    color: '#cd3c3c !important',
                 }
             },
         },
@@ -330,9 +330,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf241d',
+                    color: '#bf241d !important',
                 }
             },
         },
@@ -377,9 +377,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf241d',
+                    color: '#bf241d !important',
                 }
             },
         },
@@ -424,9 +424,9 @@ function getAppThemeProperies(themeName: string){
             },
 
             error: {
-                selector: '.app__error',
+                selector: '.app__error > *',
                 properties: {
-                    color: '#bf241d',
+                    color: '#bf241d !important',
                 }
             },
         },
@@ -468,22 +468,19 @@ function updateAppTheme(themeName: string){
  * @param message error message
  */
 function toggleErrorMessage(state: boolean, message?: string){
+    const appInput: HTMLDivElement = document.querySelector('#app__input');
     const errorMessageConainer:HTMLDivElement = document.querySelector('#app__error-message');
-    const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
 
     if(state === true) {
         const errorMessage = `[Error! ${message}]:`;
         const themeName = getSelectedThemeName();
-        const themeColors = getAppThemeProperies(themeName);
 
+        appInput.classList.add('app__error');
         errorMessageConainer.textContent = errorMessage;
         errorMessageConainer.style.display = 'initial';
-        errorMessageConainer.style.color = themeColors.error.properties.color;
-        textArea.style.color = themeColors.error.properties.color;
-        textArea.style.top = '20px';
     } else {
+        appInput.classList.remove('app__error');
         errorMessageConainer.style.display = 'none';
-        textArea.style.top = '0px';
     }
 }
 
@@ -521,13 +518,16 @@ function renderText(text: string){
         },
     });
 
+    // bug fix
+    // update theme in any cases (also with JSON errors)
+    updateAppTheme(themeName);
+
     // if variable 'formatted' returned from json2html function
     // it means that code executed wuthout error
     if(formatted) {
         // then hide error message
         toggleErrorMessage(false);
 
-        updateAppTheme(themeName);
         updateOutput(formatted);
     }
 }
