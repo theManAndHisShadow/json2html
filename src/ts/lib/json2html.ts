@@ -1,5 +1,5 @@
 import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent } from './helpers';
-import { updateThemeCSS } from './themes';
+import { updateTheme } from './themes';
 
 /**
  * Checks given value type and returns CSS class name for it.
@@ -356,8 +356,9 @@ export function json2html(params: {
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
     params.theme = params.theme || 'andromeda';
 
-    // update json2html style tag at start
-    updateThemeCSS(params.theme);
+
+    // update json2html theme at start
+    updateTheme(params.theme);
 
     // Wrapping JSON.parse call in trycatch
     try {
