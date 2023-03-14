@@ -136,3 +136,7 @@
 #app__output {
     margin-left: 15px;
 }
+
+#app__input.app__error textarea {
+    top: 20px;
+}
