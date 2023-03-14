@@ -24,6 +24,18 @@
         <div id="app__main-block">
             <div id="app__controls">
                 <label>
+                    Data set
+                    <select id="controls__data-set-selector">
+                        <option value="empty">Empty dataset</option>
+                        <option value="foo">Foo (tiny size)</option>
+                        <option value="weather">Weather (small size)</option>
+                        <option value="dataTypes" selected>Data types (meduim size)</option>
+                        <option value="richAndMorty">List of Rick and Morty characters (big size)</option>
+                        <option value="bitcoinLatestBlock">Bitcoin latest block array (big size)</option>
+                    </select>
+                </label>
+
+                <label>
                     Theme
                     <select id="controls__theme-selector">
                         <option value="andromeda">Andromeda</option>
