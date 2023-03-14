@@ -42,8 +42,8 @@
     -webkit-text-stroke-color: transparent;
     letter-spacing: 4px;
     background-position-x: 0px;
-    animation: slide-gradient 1s infinite linear;
-    animation-play-state: paused;
+    animation: slide-gradient 1.5s infinite linear;
+    animation-play-state: running;
     position: relative;
     bottom: 2px;
 }
@@ -56,10 +56,6 @@
     to {
         background-position-x: 110px;
     }
-}
-
-#app__logo:hover span:nth-child(3){
-    animation-play-state: running;
 }
 
 #app__main-block {
