@@ -864,9 +864,15 @@ export function updateThemeCSS(cssCode: string, dataMarker: string){
 
 
 
+/**
+ * Updates theme using name of theme string.
+ * @param themeName name of theme
+ */
 export function updateTheme(themeName: string){
     const themeColors = getThemeProperies(themeName);
     const cssCode = generateCSSCode(themeColors);
+
+    // for saving info about source
     const dataMarker = '[data-style-origin="json2html"]';
 
     updateThemeCSS(cssCode, dataMarker);
