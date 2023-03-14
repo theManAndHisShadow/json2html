@@ -85,6 +85,7 @@
 
 #app__controls label {
     font-size: 14px;
+    margin: 0px 10px;
 }
 
 #app__controls select {
