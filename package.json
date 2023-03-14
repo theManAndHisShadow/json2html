@@ -2,11 +2,7 @@
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "gh-pages": "^5.0.0",
-    "jest": "^29.4.1",
-    "jest-cli": "^29.4.1",
-    "jest-environment-jsdom": "^29.4.3",
     "jsdom": "^21.1.0",
-    "ts-jest": "^29.0.5",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
@@ -17,9 +13,8 @@
     "html-webpack-plugin": "^5.5.0"
   },
   "scripts": {
-    "dev": "npm run test && webpack --mode development",
-    "test": "jest --config ./jest.config.js ./tests/*",
+    "dev": "webpack --mode development",
     "deploy": "npm run prod && gh-pages -d dist",
-    "prod": "npm run test && webpack --mode production"
+    "prod": "webpack --mode production"
   }
 }
