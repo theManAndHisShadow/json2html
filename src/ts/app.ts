@@ -1,5 +1,6 @@
 import { ThemesLibrary, generateCSSCode, updateThemeCSS} from './lib/themes';
 import { json2html } from './lib/json2html';
+import { importDataset } from './lib/datasets';
 
 
 interface Collection {
@@ -450,6 +451,18 @@ function getSelectedThemeName(){
 
 
 /**
+ * Returns current seleted by user dataset name.
+ * @returns dataset name
+ */
+function getSelectedDatasetName(){
+    const datasetSelector:HTMLSelectElement = document.querySelector('#controls__data-set-selector') as HTMLSelectElement;
+
+    return datasetSelector.value;
+}
+
+
+
+/**
  * Updates app colors using theme name.
  * @param themeName 
  */
@@ -540,6 +553,7 @@ function init(){
 }`;
 
     const appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
+    const datasetSelector: HTMLSelectElement = document.querySelector('#controls__data-set-selector') as HTMLSelectElement;
     const themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
     const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
     textArea.textContent = defaultJSONString;
@@ -559,6 +573,14 @@ function init(){
             textArea.setSelectionRange(lineEnd, lineEnd);
             textArea.focus();
         }
+    });
+
+    datasetSelector.addEventListener('change', event => {
+        const datasetName = getSelectedDatasetName();
+        const dataset = importDataset(datasetName);
+
+        renderText(dataset);
+        textArea.value = dataset;
     });
 
     // render on theme changing
