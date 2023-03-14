@@ -1,3 +1,4 @@
+import { ThemesLibrary, generateCSSCode, updateThemeCSS} from './lib/themes';
 import { json2html } from './lib/json2html';
 
 
@@ -7,78 +8,431 @@ interface Collection {
     };
 }
 
-const themes:Collection= {
-    dracula: {
-        background: '#21232c',
-        tile: '#282a36',
-        border: '#424242',
-        foreground: '#ffffff',
-        error: '#ee5d44',
-    },
+function getAppThemeProperies(themeName: string){
+    const themes:ThemesLibrary= {
+        dracula: {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#21232c',
+                },
+            },
 
-    monokai: {
-        background: '#22231e',
-        tile: '#272822',
-        border: '#424242',
-        foreground: '#ffffff',
-        error: '#fd971f',
-    },
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#21232c',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#282a36',
+                    "border-color": '#424242',
+                },
+            },
 
-    daylight: {
-        background: '#e7e7e7',
-        tile: '#ffffff',
-        border: '#b6b6b6',
-        foreground: '#000000',
-        error: '#bf0404',
-    },
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#282a36',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#ffffff',
+                }
+            },
 
-    horizon: {
-        background: '#ded5cc',
-        tile: '#ffffff',
-        border: '#b6b6b6',
-        foreground: '#2f2f2f',
-        error: '#bf0404',
-    },
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#ee5d44',
+                }
+            },
+        },
 
-    "github-light": {
-        background: '#e7e7e7',
-        tile: '#ffffff',
-        border: '#cacdd1',
-        foreground: '#25292f',
-        error: '#bf0404',
-    },
 
-    "github-dark": {
-        background: '#10161d',
-        tile: '#0d1117',
-        border: '#30373d',
-        foreground: '#c9d1d9',
-        error: '#cd3c3c',
-    },
 
-    "gruvbox-dark": {
-        background: '#242424',
-        tile: '#282828',
-        border: '#3f3f3f',
-        foreground: '#A89984',
-        error: '#bf241d',
-    },
+        monokai: {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#22231e',
+                },
+            },
 
-    "gruvbox-light": {
-        background: '#e1d8b2',
-        tile: '#FBF1C7',
-        border: '#b7a5a0',
-        foreground: '#7C6F64',
-        error: '#bf241d',
-    },
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#22231e',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#272822',
+                    "border-color": '#424242',
+                },
+            },
 
-    andromeda:{
-        background: '#1e2127',
-        tile: '#23262e',
-        border: '#444444',
-        foreground: '#adb2bc',
-        error: '#bf241d',
-    },
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#272822',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#ffffff',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf0404',
+                }
+            },
+        },
+    
+
+
+        daylight: {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#e7e7e7',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#e7e7e7',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#ffffff',
+                    "border-color": '#b6b6b6',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#ffffff',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#000000',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf0404',
+                }
+            },
+        },
+
+
+
+        horizon: {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#ded5cc',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#ded5cc',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#ffffff',
+                    "border-color": '#b6b6b6',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#ffffff',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#2f2f2f',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf0404',
+                }
+            },
+        },
+
+
+
+        "github-light": {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#e7e7e7',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#e7e7e7',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#ffffff',
+                    "border-color": '#cacdd1',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#ffffff',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#25292f',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf0404',
+                }
+            },
+        },
+
+
+
+        "github-dark": {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#10161d',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#10161d',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#0d1117',
+                    "border-color": '#30373d',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#0d1117',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#c9d1d9',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#cd3c3c',
+                }
+            },
+        },
+
+
+
+        "gruvbox-dark": {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#242424',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#242424',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#282828',
+                    "border-color": '#3f3f3f',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#282828',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#A89984',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf241d',
+                }
+            },
+        },
+
+    
+
+        "gruvbox-light": {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#e1d8b2',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#e1d8b2',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#FBF1C7',
+                    "border-color": '#b7a5a0',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#FBF1C7',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#7c6f64',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf241d',
+                }
+            },
+        },
+
+
+
+        "andromeda": {
+            background: {
+                selector: '#app',
+                properties: {
+                    background: '#1e2127',
+                },
+            },
+
+            logoInner: {
+                selector: '#app__logo span:nth-child(3)',
+                properties: {
+                    color: '#1e2127',
+                },
+            },
+    
+            tiles: {
+                selector:'#app__input, #app__output, #app__controls select',
+                properties: {
+                    background: '#23262e',
+                    "border-color": '#444444',
+                },
+            },
+
+            textarea: {
+                selector:'#app__input textarea',
+                properties: {
+                    background: '#23262e',
+                },
+            },
+    
+            foreground: {
+                selector: '#app__controls, #app__controls select, #app__input, #app__input textarea, #app__logo span:nth-child(1), #app__logo span:nth-child(2)',
+                properties: {
+                    color: '#adb2bc',
+                }
+            },
+
+            error: {
+                selector: '.app__error',
+                properties: {
+                    color: '#bf241d',
+                }
+            },
+        },
+    }
+
+    return themes[themeName];
 }
 
 
@@ -96,44 +450,14 @@ function getSelectedThemeName(){
 
 
 /**
- * Updates app colors using theme name. Using 'ugly' methods
+ * Updates app colors using theme name.
  * @param themeName 
  */
-function changeAppTheme(themeName: string){
-    let themeColors = themes[themeName];
+function updateAppTheme(themeName: string){
+    const themeColors = getAppThemeProperies(themeName);
+    const cssCode = generateCSSCode(themeColors);
 
-    let appLogo: HTMLDivElement = document.querySelector('#app__logo');
-    let appLogo_jsonWord = appLogo.children[0] as HTMLSpanElement;
-    let appLogo_delimiter = appLogo.children[1] as HTMLSpanElement;
-    let appLogo_htmlWord = appLogo.children[2] as HTMLSpanElement;
-    let appContainer: HTMLDivElement = document.querySelector('#app');
-    let appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
-    let textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
-    let appControls: HTMLDivElement = document.querySelector('#app__controls');
-    let themeSelector: HTMLSelectElement = document.querySelector('#app__controls select');
-    let outputContainer: HTMLDivElement = document.querySelector('#app__output');
-
-    appContainer.style.background = themeColors.background;
-    appLogo_htmlWord.style.color = themeColors.background;
-
-    textArea.style.background = themeColors.tile;
-    appInput.style.background = themeColors.tile;
-    outputContainer.style.background = themeColors.tile;
-    outputContainer.style.background = themeColors.tile;
-    themeSelector.style.background = themeColors.tile;
-    
-    
-    appLogo_jsonWord.style.color = themeColors.foreground;
-    appLogo_delimiter.style.color = themeColors.foreground;
-    appControls.style.color = themeColors.foreground;
-    textArea.style.color = themeColors.foreground;
-    outputContainer.style.color = themeColors.foreground;
-    themeSelector.style.color = themeColors.foreground;
-
-    textArea.style.borderColor = themeColors.border;
-    appInput.style.borderColor = themeColors.border;
-    outputContainer.style.borderColor = themeColors.border;
-    themeSelector.style.borderColor = themeColors.border;
+    updateThemeCSS(cssCode, '[data-style-origin="demo-app"]');
 }
 
 
@@ -150,11 +474,11 @@ function toggleErrorMessage(state: boolean, message?: string){
     if(state === true) {
         let errorMessage = `[Error! ${message}]:`;
         let themeName = getSelectedThemeName();
-        let themeColors = themes[themeName];
+        let themeColors = getAppThemeProperies(themeName);
         errorMessageConainer.textContent = errorMessage;
         errorMessageConainer.style.display = 'initial';
-        errorMessageConainer.style.color = themeColors.error;
-        textArea.style.color = themeColors.error;
+        errorMessageConainer.style.color = themeColors.error.properties.color;
+        textArea.style.color = themeColors.error.properties.color;
         textArea.style.top = '20px';
     } else {
         errorMessageConainer.style.display = 'none';
@@ -202,7 +526,7 @@ function renderText(text: string){
         // then hide error message
         toggleErrorMessage(false);
 
-        changeAppTheme(themeName);
+        updateAppTheme(themeName);
         updateOutput(formatted);
     }
 }
