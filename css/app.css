@@ -17,7 +17,6 @@
     left: 25px;
     font-size: 45px;
     color: white;
-    cursor: pointer;
 }
 
 #app__logo span:nth-child(1) {
@@ -42,8 +41,8 @@
     -webkit-text-stroke-color: transparent;
     letter-spacing: 4px;
     background-position-x: 0px;
-    animation: slide-gradient 1s infinite linear;
-    animation-play-state: paused;
+    animation: slide-gradient 1.5s infinite linear;
+    animation-play-state: running;
     position: relative;
     bottom: 2px;
 }
@@ -56,10 +55,6 @@
     to {
         background-position-x: 110px;
     }
-}
-
-#app__logo:hover span:nth-child(3){
-    animation-play-state: running;
 }
 
 #app__main-block {
@@ -90,6 +85,7 @@
 
 #app__controls label {
     font-size: 14px;
+    margin: 0px 10px;
 }
 
 #app__controls select {
@@ -140,4 +136,8 @@
 
 #app__output {
     margin-left: 15px;
+}
+
+#app__input.app__error textarea {
+    top: 20px;
 }
