@@ -1,4 +1,4 @@
-import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent } from './helpers';
+import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent} from './helpers';
 import { updateTheme } from './themes';
 
 
@@ -165,13 +165,55 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
 
 
 /**
+ * Gruops array item onto groups segments using size arg.
+ * @param array target array
+ * @param size size of group
+ * @returns 
+ */
+function groupBigArrayItems(array: any[], size: number){
+    let grouped:any = {};
+    let startPosition = 0;
+
+    for(let i = 0; i <= Math.ceil(array.length / size); i++) {
+        let endPosition = i*size > array.length ? array.length : i*size;
+        let dynamicKeyName: string = `[${startPosition} ... ${endPosition - 1}]`;
+        let clone = array.slice(startPosition, endPosition);
+        let part: any[] = [];
+        
+        clone.forEach((item, index) => {
+            part[index + startPosition] = item;
+        });
+
+        if(startPosition !== endPosition) grouped[dynamicKeyName] = part;
+
+        startPosition = i*size;
+    }
+
+    return grouped
+}
+
+
+
+/**
  * Renders complex pair, where key:value - value is Object or Array.
  * @param keyName 
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderComplexItem(params: {keyName: string, itemValue: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
-    const nestedObject = params.itemValue;
+function renderComplexItem(params: {
+    keyName: string, 
+    itemValue: any, 
+    renderNestedLength: boolean, 
+    highlightLinks: boolean, 
+    collapseAll: boolean,  
+    showTypeOnHover: boolean,
+    groupBigArrayItemsBy: number,
+    isGroupItem: boolean,
+}){ 
+    const values = Object.values(params.itemValue);
+    const useGrouping = values.length > params.groupBigArrayItemsBy;
+    const nestedObject = useGrouping ? groupBigArrayItems(values, params.groupBigArrayItemsBy) : params.itemValue;
+    const nestedObjectSize = Object.values(nestedObject).length;
 
     const renderedNested = render({
         parsedJSON: nestedObject,
@@ -179,8 +221,10 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
         highlightLinks: params.highlightLinks,
         collapseAll: params.collapseAll,
         showTypeOnHover: params.showTypeOnHover,
+        groupBigArrayItemsBy: params.groupBigArrayItemsBy,
+        isGroupItem: useGrouping,
     });
-    renderedNested.classList.add('json2html-nested-value')
+    renderedNested.classList.add('json2html-nested-value');
 
     const nestedElement = document.createElement('div');
     nestedElement.classList.add('json2html-complex-pair');
@@ -203,8 +247,7 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
     const typeSignature = document.createElement('span');
     typeSignature.textContent = params.itemValue.constructor.name;
 
-
-    if(Object.values(nestedObject).length > 0){
+    if(nestedObjectSize > 0){
         // Adding multiple event handlers, 
         // clicking on an element from the array below should invoke callback
         addMultipleEventHandlers([
@@ -238,12 +281,27 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
     // only for Array items
     if(params.renderNestedLength === true) {
         if(isArray(params.itemValue)) {
-            const length = params.itemValue.length == 0 ? 'empty' : params.itemValue.length;
-            const word = length == "empty" 
-                    ? "" : length == 1 
+            // if it is part of grouped array - as length use group size 
+            // because there a bug that show incorrect common array size
+            let length = params.itemValue.length;
+
+            if(params.isGroupItem){
+                let firstIndex = Number(params.keyName.split(' ... ')[0].replace('[', ''));
+                let lastIndex = Number(params.keyName.split(' ... ')[1].replace(']', ''));
+
+                length = lastIndex - firstIndex + 1;
+            }
+
+            // specify empty variant
+            const size = length == 0 ? 'empty' : length;
+
+            // define item word
+            const word = size == "empty" 
+                    ? "" : size == 1 
                         ? ' item' : " items";
     
-            typeSignature.textContent += ` (${length}${word})`;
+        
+            typeSignature.textContent += ` (${size}${word})`;
         } else if(isObject(params.itemValue) && Object.keys(params.itemValue).length === 0){
             typeSignature.textContent += ` (empty)`;
         }
@@ -281,7 +339,15 @@ function renderComplexItem(params: {keyName: string, itemValue: any, renderNeste
  * @param parsedJSON regular object, parsed JSON object
  * @returns fully ready HTMLDivElement
  */
-function render(params: {parsedJSON: any, renderNestedLength: boolean, highlightLinks: boolean, collapseAll: boolean,  showTypeOnHover: boolean}){
+function render(params: {
+    parsedJSON: any, 
+    renderNestedLength: boolean, 
+    highlightLinks: boolean, 
+    collapseAll: boolean,  
+    showTypeOnHover: boolean, 
+    groupBigArrayItemsBy: number,
+    isGroupItem: boolean,
+}){
     const keys = Object.keys(params.parsedJSON);
 
     // rendered child nodes
@@ -302,6 +368,8 @@ function render(params: {parsedJSON: any, renderNestedLength: boolean, highlight
                 highlightLinks: params.highlightLinks,
                 collapseAll: params.collapseAll,
                 showTypeOnHover: params.showTypeOnHover,
+                groupBigArrayItemsBy: params.groupBigArrayItemsBy,
+                isGroupItem: params.isGroupItem,
            });
             
             siblings.push(nestedElement);
@@ -342,6 +410,8 @@ type ErrorHandler = (error: Error) => void
  * Supports 9 themes: andromeda, daylight, dracula, gruvbox-dark, gruvbox-light, github-light, github-dark, horizon, monokai. 
  * Also supports user themes. For more info check project`s github mini wiki.
  * @param params.onError error handler callback function, gives access to Error instance.
+ * @param params.groupBigArrayItemsBy Size of group in big array. By default - 100. Minimum value - 25 
+ * That means if array length > 100 - array will be grouped onto 'n' groups by 100 items.
  * @returns 
  */
 export function json2html(params: {
@@ -352,6 +422,7 @@ export function json2html(params: {
     showTypeOnHover?: boolean, 
     theme?: string,
     onError?:ErrorHandler,
+    groupBigArrayItemsBy?: number,
 }){
     // default values
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
@@ -359,6 +430,7 @@ export function json2html(params: {
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
     params.theme = params.theme || 'andromeda';
+    params.groupBigArrayItemsBy = params.groupBigArrayItemsBy <= 25 ? 25 : params.groupBigArrayItemsBy || 100;
 
 
     // update json2html theme at start
@@ -373,6 +445,8 @@ export function json2html(params: {
             highlightLinks: params.highlightLinks,
             collapseAll: params.collapseAll,
             showTypeOnHover: params.showTypeOnHover,
+            groupBigArrayItemsBy: params.groupBigArrayItemsBy,
+            isGroupItem: false,
         });
         
         return rendered;
