@@ -41,7 +41,13 @@ function wrapValue(value: any){
  * @param itemValue 
  * @returns ready for other manipulations HTML Node.
  */
-function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlightLinks: boolean,  showTypeOnHover: boolean}){
+function renderPrimitiveItem(params: {
+    keyName: string, 
+    itemValue: any, 
+    highlightLinks: boolean, 
+    openLinksInNewTab: boolean, 
+    showTypeOnHover: boolean
+}){
     const element = document.createElement('div');
     element.classList.add('json2html-pair');
     
@@ -78,7 +84,7 @@ function renderPrimitiveItem(params: {keyName: string, itemValue: any, highlight
     // insert link if highlightLinks is true and string is link
     if(params.highlightLinks === true && isLink(params.itemValue)) {
         const link = document.createElement('a');
-        link.setAttribute('target', '_blank');
+        if(params.openLinksInNewTab === true) link.setAttribute('target', '_blank');
         link.href = params.itemValue;
         link.textContent = `"${params.itemValue}"`;
 
@@ -205,6 +211,7 @@ function renderComplexItem(params: {
     itemValue: any, 
     renderNestedLength: boolean, 
     highlightLinks: boolean, 
+    openLinksInNewTab: boolean,
     collapseAll: boolean,  
     showTypeOnHover: boolean,
     groupBigArrayItemsBy: number,
@@ -219,6 +226,7 @@ function renderComplexItem(params: {
         parsedJSON: nestedObject,
         renderNestedLength: params.renderNestedLength,
         highlightLinks: params.highlightLinks,
+        openLinksInNewTab: params.openLinksInNewTab,
         collapseAll: params.collapseAll,
         showTypeOnHover: params.showTypeOnHover,
         groupBigArrayItemsBy: params.groupBigArrayItemsBy,
@@ -342,6 +350,7 @@ function renderComplexItem(params: {
 function render(params: {
     parsedJSON: any, 
     renderNestedLength: boolean, 
+    openLinksInNewTab: boolean,
     highlightLinks: boolean, 
     collapseAll: boolean,  
     showTypeOnHover: boolean, 
@@ -366,6 +375,7 @@ function render(params: {
                 itemValue: params.parsedJSON[key],
                 renderNestedLength: params.renderNestedLength,
                 highlightLinks: params.highlightLinks,
+                openLinksInNewTab: params.openLinksInNewTab,
                 collapseAll: params.collapseAll,
                 showTypeOnHover: params.showTypeOnHover,
                 groupBigArrayItemsBy: params.groupBigArrayItemsBy,
@@ -380,6 +390,7 @@ function render(params: {
                 keyName: key,
                 itemValue:  params.parsedJSON[key],
                 highlightLinks: params.highlightLinks,
+                openLinksInNewTab: params.openLinksInNewTab,
                 showTypeOnHover: params.showTypeOnHover,
             });
             
@@ -404,6 +415,7 @@ type ErrorHandler = (error: Error) => void
  * @param params.json JSON string to render
  * @param params.renderNestedLength Allows render Array length in Array type signature. By default - true.
  * @param params.highlightLinks Allows render url string as <a> clickable tag. By default - true.
+ * @param params.openLinksInNewTab On true value - opens links at new browser tab. By default - true.
  * @param params.collapseAll On true value - renders HTML block at start with minimized (collapsed) content. By default - true.
  * @param params.showTypeOnHover On true value - show default html "title" tooltip on primitive values with their type. By default - true.
  * @param params.theme Renders HTML block with given theme. By default uses "dracula" theme. 
@@ -418,6 +430,7 @@ export function json2html(params: {
     json: string, 
     renderNestedLength?: boolean, 
     highlightLinks?: boolean, 
+    openLinksInNewTab?: boolean,
     collapseAll?: boolean, 
     showTypeOnHover?: boolean, 
     theme?: string,
@@ -427,6 +440,7 @@ export function json2html(params: {
     // default values
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
+    params.openLinksInNewTab = params.openLinksInNewTab == false ? false : true;
     params.collapseAll = params.collapseAll == false ? false : true;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
     params.theme = params.theme || 'andromeda';
@@ -443,6 +457,7 @@ export function json2html(params: {
             parsedJSON: {json: parsed},
             renderNestedLength: params.renderNestedLength,
             highlightLinks: params.highlightLinks,
+            openLinksInNewTab: params.openLinksInNewTab,
             collapseAll: params.collapseAll,
             showTypeOnHover: params.showTypeOnHover,
             groupBigArrayItemsBy: params.groupBigArrayItemsBy,
