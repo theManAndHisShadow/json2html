@@ -207,27 +207,32 @@ function groupBigArrayItems(array: any[], size: number){
  * @returns ready for other manipulations HTML Node.
  */
 function renderComplexItem(params: {
+    depth: number,
     keyName: string, 
     itemValue: any, 
     renderNestedLength: boolean, 
     highlightLinks: boolean, 
     openLinksInNewTab: boolean,
     collapseAll: boolean,  
+    showLevel: number,
     showTypeOnHover: boolean,
     groupBigArrayItemsBy: number,
     isGroupItem: boolean,
 }){ 
+    let depth = params.depth + 1;
     const values = Object.values(params.itemValue);
     const useGrouping = values.length > params.groupBigArrayItemsBy;
     const nestedObject = useGrouping ? groupBigArrayItems(values, params.groupBigArrayItemsBy) : params.itemValue;
     const nestedObjectSize = Object.values(nestedObject).length;
 
     const renderedNested = render({
+        depth: depth,
         parsedJSON: nestedObject,
         renderNestedLength: params.renderNestedLength,
         highlightLinks: params.highlightLinks,
         openLinksInNewTab: params.openLinksInNewTab,
         collapseAll: params.collapseAll,
+        showLevel: params.showLevel,
         showTypeOnHover: params.showTypeOnHover,
         groupBigArrayItemsBy: params.groupBigArrayItemsBy,
         isGroupItem: useGrouping,
@@ -236,6 +241,7 @@ function renderComplexItem(params: {
 
     const nestedElement = document.createElement('div');
     nestedElement.classList.add('json2html-complex-pair');
+    nestedElement.setAttribute('data-tree-level', `${depth}`);
 
     const spoilerBtn = document.createElement('span');
     spoilerBtn.textContent = '▶';
@@ -245,7 +251,13 @@ function renderComplexItem(params: {
         spoilerBtn.classList.add('json2html-spoiler-toggle--collapsed');
         renderedNested.setAttribute('hidden', '');
     } else {
-        spoilerBtn.classList.add('json2html-spoiler-toggle--uncollapsed');
+        if(depth <= params.showLevel) {
+            console.log(params.depth, params.showLevel, params.keyName)
+            spoilerBtn.classList.add('json2html-spoiler-toggle--uncollapsed');
+        } else {
+            spoilerBtn.classList.add('json2html-spoiler-toggle--collapsed');
+            renderedNested.setAttribute('hidden', '');
+        }
     }
 
     const parentPropertyName = document.createElement('span');
@@ -337,7 +349,9 @@ function renderComplexItem(params: {
 
     if(Object.values(nestedObject).length > 0) nestedElement.appendChild(renderedNested);
     
+    // console.log(params.depth, params.keyName);
     return nestedElement;
+
 }
 
 
@@ -348,11 +362,13 @@ function renderComplexItem(params: {
  * @returns fully ready HTMLDivElement
  */
 function render(params: {
+    depth: number,
     parsedJSON: any, 
     renderNestedLength: boolean, 
     openLinksInNewTab: boolean,
     highlightLinks: boolean, 
-    collapseAll: boolean,  
+    collapseAll: boolean,
+    showLevel: number  
     showTypeOnHover: boolean, 
     groupBigArrayItemsBy: number,
     isGroupItem: boolean,
@@ -371,17 +387,19 @@ function render(params: {
         // if key has complex value - use renderComplexItem()
         if(isArray(params.parsedJSON[key]) || isObject(params.parsedJSON[key])) {
             const nestedElement = renderComplexItem({
+                depth: params.depth,
                 keyName: key,
                 itemValue: params.parsedJSON[key],
                 renderNestedLength: params.renderNestedLength,
                 highlightLinks: params.highlightLinks,
                 openLinksInNewTab: params.openLinksInNewTab,
                 collapseAll: params.collapseAll,
+                showLevel: params.showLevel,
                 showTypeOnHover: params.showTypeOnHover,
                 groupBigArrayItemsBy: params.groupBigArrayItemsBy,
                 isGroupItem: params.isGroupItem,
            });
-            
+
             siblings.push(nestedElement);
 
         // if key has primitive value - use renderPrimitiveItem()
@@ -403,6 +421,7 @@ function render(params: {
         rendered.appendChild(node);
     });
 
+    // console.log(siblings, keys);
     return rendered;
 }
 
@@ -417,6 +436,8 @@ type ErrorHandler = (error: Error) => void
  * @param params.highlightLinks Allows render url string as <a> clickable tag. By default - true.
  * @param params.openLinksInNewTab On true value - opens links at new browser tab. By default - true.
  * @param params.collapseAll On true value - renders HTML block at start with minimized (collapsed) content. By default - true.
+ * @param params.showLevel Collapse all levels except given level value. 
+ * This option ignoring if params.collapseAll is true! By default - 1.
  * @param params.showTypeOnHover On true value - show default html "title" tooltip on primitive values with their type. By default - true.
  * @param params.theme Renders HTML block with given theme. By default uses "dracula" theme. 
  * Supports 9 themes: andromeda, daylight, dracula, gruvbox-dark, gruvbox-light, github-light, github-dark, horizon, monokai. 
@@ -432,6 +453,7 @@ export function json2html(params: {
     highlightLinks?: boolean, 
     openLinksInNewTab?: boolean,
     collapseAll?: boolean, 
+    showLevel?: number,
     showTypeOnHover?: boolean, 
     theme?: string,
     onError?:ErrorHandler,
@@ -441,7 +463,8 @@ export function json2html(params: {
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.openLinksInNewTab = params.openLinksInNewTab == false ? false : true;
-    params.collapseAll = params.collapseAll == false ? false : true;
+    params.collapseAll = params.collapseAll == true ? true : false;
+    params.showLevel = params.showLevel || 1;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
     params.theme = params.theme || 'andromeda';
     params.groupBigArrayItemsBy = params.groupBigArrayItemsBy <= 25 ? 25 : params.groupBigArrayItemsBy || 100;
@@ -454,11 +477,13 @@ export function json2html(params: {
     try {
         const parsed = JSON.parse(params.json);
         const rendered = render({
+            depth: 0,
             parsedJSON: {json: parsed},
             renderNestedLength: params.renderNestedLength,
             highlightLinks: params.highlightLinks,
             openLinksInNewTab: params.openLinksInNewTab,
             collapseAll: params.collapseAll,
+            showLevel: params.showLevel,
             showTypeOnHover: params.showTypeOnHover,
             groupBigArrayItemsBy: params.groupBigArrayItemsBy,
             isGroupItem: false,
