@@ -177,14 +177,14 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
  * @returns 
  */
 function groupBigArrayItems(array: any[], size: number){
-    let grouped:any = {};
     let startPosition = 0;
+    const grouped:any = {};
 
     for(let i = 0; i <= Math.ceil(array.length / size); i++) {
-        let endPosition = i*size > array.length ? array.length : i*size;
-        let dynamicKeyName: string = `[${startPosition} ... ${endPosition - 1}]`;
-        let clone = array.slice(startPosition, endPosition);
-        let part: any[] = [];
+        const endPosition = i*size > array.length ? array.length : i*size;
+        const dynamicKeyName: string = `[${startPosition} ... ${endPosition - 1}]`;
+        const clone = array.slice(startPosition, endPosition);
+        const part: any[] = [];
         
         clone.forEach((item, index) => {
             part[index + startPosition] = item;
