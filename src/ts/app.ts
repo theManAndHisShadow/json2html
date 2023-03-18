@@ -522,7 +522,6 @@ function renderText(text: string){
 
     const formatted = json2html({
         json: text,
-        collapseAll: false,
         showTypeOnHover: true,
         theme: themeName,
         // on error show error message
