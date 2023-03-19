@@ -795,7 +795,7 @@ function getThemeProperies(themeName: string){
             collapseAllToggle: {
                 selector: '.json2html-collapse-all-toggle',
                 properties: {
-                    color: '#black',
+                    color: 'white',
                 },
             },
         
