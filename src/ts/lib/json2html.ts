@@ -3,6 +3,11 @@ import { updateTheme } from './themes';
 
 
 
+// define some types
+type ErrorHandler = (error: Error) => void
+
+
+
 /**
  * Checks given value type and returns CSS class name for it.
  * @param value 
@@ -146,6 +151,7 @@ function renderCollapseButtons(params: {targetSpoiler: Element, renderIn: Elemen
     const collapseButtonClassName = 'json2html-collapse-all-toggle';
     const isExist = params.renderIn.querySelector(`${collapseButtonClassName}`);
     const collapseAllNestedBtn = isExist || document.createElement('span');
+    
     if(!isExist) collapseAllNestedBtn.className = collapseButtonClassName;
     
     // initial button element update
@@ -252,7 +258,6 @@ function renderComplexItem(params: {
         renderedNested.setAttribute('hidden', '');
     } else {
         if(depth <= params.showLevel) {
-            console.log(params.depth, params.showLevel, params.keyName)
             spoilerBtn.classList.add('json2html-spoiler-toggle--uncollapsed');
         } else {
             spoilerBtn.classList.add('json2html-spoiler-toggle--collapsed');
@@ -349,9 +354,7 @@ function renderComplexItem(params: {
 
     if(Object.values(nestedObject).length > 0) nestedElement.appendChild(renderedNested);
     
-    // console.log(params.depth, params.keyName);
     return nestedElement;
-
 }
 
 
@@ -421,14 +424,11 @@ function render(params: {
         rendered.appendChild(node);
     });
 
-    // console.log(siblings, keys);
     return rendered;
 }
 
 
 
-// define some types
-type ErrorHandler = (error: Error) => void
 /**
  * Renders JSON string in colored and formatted HTML block.
  * @param params.json JSON string to render
