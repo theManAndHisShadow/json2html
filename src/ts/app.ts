@@ -3,12 +3,12 @@ import { json2html } from './lib/json2html';
 import { importDataset } from './lib/datasets';
 
 
-interface Collection {
-    [key: string]: {
-        [key: string]: string, 
-    };
-}
 
+/**
+ * Returns App theme css properties object.
+ * @param themeName name of theme
+ * @returns CSS props object {selector: string, props: {cssProp:value}}
+ */
 function getAppThemeProperies(themeName: string){
     const themes:ThemesLibrary= {
         dracula: {
@@ -546,6 +546,7 @@ function renderText(text: string){
 
 
 
+// main function
 function init(){
     const defaultJSONString = `{
     "string":"Hello world!", "paragraph":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo?", "link":"https://www.freedesktop.org/wiki/","number":42, "negativeNumber": -1,"floatNumber":3.1415926535,"boolean":true, "isNull": null, "isUndefined": "undefined", "emptyArray": [], "emptyObject": {}, "arrayOfNumbers": [1, 2, 3, 4, 5], "arrayOfObjects": [{"id": 1, "profileType":"public","blocked": false}, {"id":2, "profileType":"private", "blocked": true}, {"id": 3, "profileType":"private", "blocked": false}], "superNested": { "level1": {"level2": {"level3": {"level4":{"level5":{"level6":"Btw I use Arch"}}}}}}
@@ -555,6 +556,7 @@ function init(){
     const datasetSelector: HTMLSelectElement = document.querySelector('#controls__data-set-selector') as HTMLSelectElement;
     const themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
     const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    
     textArea.textContent = defaultJSONString;
    
     // render on init
