@@ -1,3 +1,8 @@
+// define some types
+type EventCallbackHandler = (event: Event) => void
+
+
+
 /**
  * Checks if given string is a link.
  * @param target string to check
@@ -47,7 +52,6 @@ export function addMultipleEventHandlers(targets: HTMLSpanElement[], evenType: s
 
 
 
-type EventCallbackHandler = (event: Event) => void
 /**
  * Emulates event by eventType on target element.
  * @param target event target
