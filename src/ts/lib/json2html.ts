@@ -432,6 +432,7 @@ type ErrorHandler = (error: Error) => void
 /**
  * Renders JSON string in colored and formatted HTML block.
  * @param params.json JSON string to render
+ * @param params.rootName Name of root rendered object key. By default 'json'.
  * @param params.renderNestedLength Allows render Array length in Array type signature. By default - true.
  * @param params.highlightLinks Allows render url string as <a> clickable tag. By default - true.
  * @param params.openLinksInNewTab On true value - opens links at new browser tab. By default - true.
@@ -449,6 +450,7 @@ type ErrorHandler = (error: Error) => void
  */
 export function json2html(params: {
     json: string, 
+    rootName?: string,
     renderNestedLength?: boolean, 
     highlightLinks?: boolean, 
     openLinksInNewTab?: boolean,
@@ -460,6 +462,7 @@ export function json2html(params: {
     groupBigArrayItemsBy?: number,
 }){
     // default values
+    params.rootName = params.rootName || 'json';
     params.renderNestedLength = params.renderNestedLength == false ? false : true;
     params.highlightLinks = params.highlightLinks == false ? false : true;
     params.openLinksInNewTab = params.openLinksInNewTab == false ? false : true;
@@ -478,7 +481,7 @@ export function json2html(params: {
         const parsed = JSON.parse(params.json);
         const rendered = render({
             depth: 0,
-            parsedJSON: {json: parsed},
+            parsedJSON: {[params.rootName]: parsed},
             renderNestedLength: params.renderNestedLength,
             highlightLinks: params.highlightLinks,
             openLinksInNewTab: params.openLinksInNewTab,
