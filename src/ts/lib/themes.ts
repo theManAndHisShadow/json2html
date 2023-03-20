@@ -870,7 +870,7 @@ export function updateThemeCSS(cssCode: string, dataMarker: string){
  */
 export function updateTheme(themeName: string){
     const isUserTheme = /css\/themes\/[a-zA-Z\-0-9]+\.css/.test(themeName);
-    console.log('user theme', themeName);
+
     if(isUserTheme){
         const path = themeName;
         const userThemeStyle = document.createElement('link');
