@@ -37,9 +37,15 @@ module.exports = {
         inject: false,
       }),
       new CopyWebpackPlugin({
-        patterns: [
-          { from: "./src/css/", to: "./css/" },
-        ],
+        patterns: [{ 
+          from: "./src/css/", 
+          to: "./css/",
+          globOptions: {
+            // this line helps avoid compile final dist with samples folder
+            ignore: [
+                '**/css/samples/**',
+            ]
+          }}],
       }),
     ],
 }
