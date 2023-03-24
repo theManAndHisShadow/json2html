@@ -1,5 +1,5 @@
 import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent} from './helpers';
-import { updateTheme } from './themes';
+import { generateLibBasicStyle, updateTheme } from './themes';
 
 
 
@@ -472,7 +472,7 @@ export function json2html(params: {
     params.theme = params.theme || 'andromeda';
     params.groupBigArrayItemsBy = params.groupBigArrayItemsBy <= 25 ? 25 : params.groupBigArrayItemsBy || 100;
 
-
+    generateLibBasicStyle();
     // update json2html theme at start
     updateTheme(params.theme);
 
