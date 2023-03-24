@@ -1,6 +1,6 @@
-import { ThemesLibrary, generateCSSCode, updateThemeCSS} from './lib/themes';
-import { json2html } from './lib/json2html';
-import { importDataset } from './lib/datasets';
+import { ThemesLibrary, generateCSSCode, updateThemeCSS} from './json2html-core/themes';
+import { json2html } from './json2html-core/json2html';
+import { importDataset } from './json2html-core/datasets';
 
 
 
