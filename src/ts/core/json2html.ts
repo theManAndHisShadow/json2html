@@ -1,5 +1,5 @@
 import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent} from './helpers';
-import { updateTheme } from './themes';
+import { updateTheme } from '../theming/themes';
 
 
 
