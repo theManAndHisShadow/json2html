@@ -1,10 +1,6 @@
 {
-    "files": [
-        "src/ts/core/json2html.ts",
-        "src/ts/app.ts",
-    ],
     "compilerOptions": {
         "noImplicitAny": true,
-        "target": "es5"
+        "target": "es5",
     }
 }
