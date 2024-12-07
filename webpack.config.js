@@ -5,8 +5,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
-      'lib/json2html': './src/ts/core/json2html.ts',
-      'app': './src/ts/app.ts',
+      'lib/json2html': './src/ts/lib/core/json2html.ts',
+      'app': './src/ts/demo/app.ts',
     },
 
     mode: 'devlopment',
