@@ -13,8 +13,7 @@
     "html-webpack-plugin": "^5.5.0"
   },
   "scripts": {
-    "dev": "webpack --mode development",
-    "deploy": "npm run prod && gh-pages -d dist",
-    "prod": "webpack --mode production"
+    "build": "webpack --mode production",
+    "deploy": "npm run prod && gh-pages -d dist"
   }
 }
