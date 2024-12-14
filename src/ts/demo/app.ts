@@ -1,6 +1,6 @@
 import { generateCSSCode, updateThemeCSS} from '../lib/theming/themes';
 import getFullTheme from './theming/themes';
-import { json2html } from '../lib/core/json2html';
+import json2html from '../lib/core/json2html';
 import { importDataset } from './datasets';
 import draculaTheme from '../lib/theming/themes/dracula.theme';
 
@@ -48,12 +48,16 @@ function updateAppTheme(themeName: string){
  * @param message error message
  */
 function toggleErrorMessage(state: boolean, message?: string){
-    const appInput: HTMLDivElement = document.querySelector('#app__input');
-    const errorMessageConainer:HTMLDivElement = document.querySelector('#app__error-message');
+    const appInput = document.querySelector('#app__input') as HTMLDivElement | null;
+    const errorMessageConainer = document.querySelector('#app__error-message') as HTMLDivElement | null;
+
+    if(!appInput || !errorMessageConainer) {
+        console.error("toggleErrorMessage(state: boolean, message?: string) - can not found in the DOM '#app__input' OR '#app__error-message' element, or both!");
+        return;
+    } 
 
     if(state === true) {
         const errorMessage = `[Error! ${message}]:`;
-        const themeName = getSelectedThemeName();
 
         appInput.classList.add('app__error');
         errorMessageConainer.textContent = errorMessage;
@@ -71,11 +75,24 @@ function toggleErrorMessage(state: boolean, message?: string){
  * @param newOutput 
  */
 function updateOutput(newOutput: HTMLDivElement){
-    const output = document.querySelector('#app__output');
+    const output = document.querySelector('#app__output') as HTMLDivElement | null;
 
-    output.children.length == 0 
-        ? output.appendChild(newOutput) 
-        : output.replaceChild(newOutput, output.firstElementChild);
+    if (!output) {
+        console.error("updateOutput(newOutput: HTMLDivElement) - can not find '#app__output' element in DOM!")
+        return;
+    }
+
+    if (output.children.length === 0) {
+        output.appendChild(newOutput);
+    } else {
+        const firstChild = output.firstElementChild;
+        if (!firstChild) {
+            console.error("updateOutput(newOutput: HTMLDivElement) - can not find '#app__output' FIRST CHILD element in DOM!")
+            return;
+        }
+
+        output.replaceChild(newOutput, firstChild);
+    }
 }
 
 
@@ -119,10 +136,14 @@ function init(){
     "string":"Hello world!", "paragraph":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo?", "link":"https://www.freedesktop.org/wiki/","number":42, "negativeNumber": -1,"floatNumber":3.1415926535,"boolean":true, "isNull": null, "isUndefined": "undefined", "emptyArray": [], "emptyObject": {}, "arrayOfNumbers": [1, 2, 3, 4, 5], "arrayOfObjects": [{"id": 1, "profileType":"public","blocked": false}, {"id":2, "profileType":"private", "blocked": true}, {"id": 3, "profileType":"private", "blocked": false}], "superNested": { "level1": {"level2": {"level3": {"level4":{"level5":{"level6":"Btw I use Arch"}}}}}}
 }`;
 
-    const appInput: HTMLTextAreaElement = document.querySelector('#app #app__input');
-    const datasetSelector: HTMLSelectElement = document.querySelector('#controls__data-set-selector') as HTMLSelectElement;
-    const themeSelector:HTMLSelectElement = document.querySelector('#controls__theme-selector') as HTMLSelectElement;
-    const textArea: HTMLTextAreaElement = document.querySelector('#app #app__input textarea');
+    const appInput = document.querySelector('#app #app__input') as HTMLTextAreaElement | null;
+    const datasetSelector = document.querySelector('#controls__data-set-selector') as HTMLSelectElement | null;
+    const themeSelector = document.querySelector('#controls__theme-selector') as HTMLSelectElement | null;
+    const textArea = document.querySelector('#app #app__input textarea') as HTMLTextAreaElement | null;
+
+    if(!appInput || !datasetSelector || !themeSelector || !textArea) {
+        throw new Error('Init process crash! Check that demo app UI elemens is existing!')
+    }
     
     textArea.textContent = defaultJSONString;
    
