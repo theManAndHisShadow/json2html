@@ -6,11 +6,14 @@
         // transpiled code location
         "outDir": "./build",
 
-
+        
         "noImplicitAny": true,
         "target": "es6",
-        "module": "ESNext",
+        "module": "System",
+
         "declaration": true,
+        "declarationMap": false,
+        "declarationDir": "./build/types",
 
         // allow mix ts/js
         "allowJs": true,
@@ -18,6 +21,6 @@
     },
 
     // 
-    "include": ["src/ts/lib/*"],
-    "exclude": ["node_modules", "build",  "src/ts/lib/theming/themes" ]
+    "include": ["src/ts/lib/core/json2html.ts", "src/ts/lib/types.d.ts"],
+    "exclude": ["node_modules", "build",  "src/ts/lib/theming/themes", ]
 }
