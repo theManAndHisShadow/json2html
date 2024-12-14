@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         // source code location
-        "rootDir": "./src/ts/demo",
+        "rootDir": "./src/demo/ts/",
 
         // transpiled code location
         "outDir": "./demo",
@@ -16,10 +16,10 @@
     },
 
     // 
-    "include": ["src/ts/demo/*"],
+    "include": ["src/demo/ts/*"],
     "exclude": [ 
         "node_modules", 
         "demo", 
-        "src/ts/lib/"
+        "src/lib/ts/"
     ] 
 }

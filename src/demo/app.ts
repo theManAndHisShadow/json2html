@@ -1,8 +1,8 @@
-import { generateCSSCode, updateThemeCSS} from '../lib/theming/themes';
+import { generateCSSCode, updateThemeCSS} from '../lib/ts/theming/themes';
 import getFullTheme from './theming/themes';
-import json2html from '../lib/core/json2html';
+import json2html from '../lib/ts/core/json2html';
 import { importDataset } from './datasets';
-import draculaTheme from '../lib/theming/themes/dracula.theme';
+import draculaTheme from '../lib/ts/theming/themes/dracula.theme';
 
 
 /**

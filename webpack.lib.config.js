@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
     // where is lib main file located
-    entry: './src/ts/lib/core/json2html.ts',
+    entry: './src/lib/ts/core/json2html.ts',
 
     // lib build ouput
     output: {
@@ -50,7 +50,7 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [{
-                from: "./src/ts/lib/theming/themes/",
+                from: "./src/lib/ts/theming/themes/",
                 to: "./themes/",
             }],
         }),

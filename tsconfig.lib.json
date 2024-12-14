@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         // source code location
-        "rootDir": "./src/ts/lib/",
+        "rootDir": "./src/lib/ts/",
 
         // transpiled code location
         "outDir": "./build",
@@ -21,6 +21,6 @@
     },
 
     // 
-    "include": ["src/ts/lib/core/json2html.ts", "src/ts/lib/types.d.ts"],
-    "exclude": ["node_modules", "build",  "src/ts/lib/theming/themes", ]
+    "include": ["src/lib/ts/core/json2html.ts", "src/lib/ts/types.d.ts"],
+    "exclude": ["node_modules", "build",  "src/lib/ts/theming/themes", ]
 }
