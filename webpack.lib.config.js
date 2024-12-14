@@ -1,6 +1,7 @@
 // library building webpack config file
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
     // where is lib main file located
@@ -35,6 +36,15 @@ module.exports = {
     // Bundle '.ts' files
     resolve: {
         extensions: ['.ts',],
+    },
+
+    optimization: {
+        minimize: true, 
+        minimizer: [
+            new TerserPlugin({
+                exclude: /themes/, 
+            }),
+        ],
     },
 
     plugins: [
