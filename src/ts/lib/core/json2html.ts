@@ -1,11 +1,5 @@
-import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent} from './helpers';
+import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent, injectCSS} from './helpers';
 import { useTheme } from '../theming/themes';
-
-
-
-// define some types
-type ErrorHandler = (error: Error) => void
-
 
 
 /**
@@ -126,20 +120,36 @@ function hasNestedItems(targetItem: any){
 }
 
 
-
 /**
  * Updates the text content of the collapse button.
- * @param spoiler target spoiler, that affects to collapse buttons text contents
- * @param collapseButton Target collapse button. An optional argument. If empty, the function will itself look for a button
+ * @param spoiler Target spoiler that affects the collapse button's text content.
+ * @param collapseButton Target collapse button. An optional argument. If empty, the function will look for a button itself.
  */
-function updateCollapseToggle(spoiler: Element, collapseButton?: Element){
+function updateCollapseToggle(spoiler: Element, collapseButton?: Element): void {
+    if (!spoiler || !spoiler.parentElement) {
+        throw new Error(
+            'updateCollapseToggle(spoiler: Element, collapseButton?: Element) - ' +
+            'first argument "spoiler" is not a valid Element or has no parentElement.'
+        );
+    }
+
     const collapseButtonClassName = 'json2html-collapse-all-toggle';
-    collapseButton = collapseButton || spoiler.parentElement.querySelector(`.${collapseButtonClassName}`);
+    collapseButton = collapseButton ?? spoiler.parentElement.querySelector(`.${collapseButtonClassName}`) ?? undefined;
+
+    if (!collapseButton) {
+        throw new Error(
+            'updateCollapseToggle(spoiler: Element, collapseButton?: Element) - ' +
+            'could not find "collapseButton". Please check your markup or function usage.'
+        );
+    }
 
     const toggleState = spoiler.className.split('--')[1];
-    const action = toggleState == "uncollapsed" ? "collapse" : "uncollapse";
-    if(collapseButton) collapseButton.textContent = `(${action} all)`
+    const action = toggleState === "uncollapsed" ? "collapse" : "uncollapse";
+
+    // Update button text
+    collapseButton.textContent = `(${action} all)`;
 }
+
 
 
 
@@ -427,6 +437,90 @@ function render(params: {
     return rendered;
 }
 
+function injectBasicStyle(){
+    const cssCode = `
+        .json2html-pair  > *, 
+        .json2html-complex-pair > * {
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .json2html-complex-pair > span {
+            cursor: pointer;
+        }
+
+        .json2html-complex-pair div {
+            margin-left: 10px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .json2html-spoiler-toggle--collapsed {
+            display: inline-block;
+            margin-right: -7px;
+            position: relative;
+            right: 9px;
+            font-size: 10px;
+            bottom: 1px;
+            transition: 0.3s ease;
+        }
+
+        .json2html-spoiler-toggle--uncollapsed {
+            display: inline-block;
+            margin-right: -7px;
+            position: relative;
+            right: 9px;
+            font-size: 10px;
+            transition: 0.3s ease;
+            transform: rotate(90deg);
+            bottom: -1px;
+        } 
+
+        .json2html-value {
+            margin-left: -7px;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        .json2html-type__object, 
+        .json2html-type__array {
+            font-style: italic;
+        }
+
+        .json2html-collapse-all-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .json2html-collapse-all-toggle {
+            opacity: 0;
+            position: relative;
+            padding-left: 10px;
+            transition: 0.3s ease;
+        }
+
+        .json2html-container {
+            padding: 3px 10px;
+            margin-left: 5px;
+        }
+
+        .json2html-container:first-child {
+            margin-left: 0px;
+            padding-left: 15px;
+        }
+
+        .json2html-spoiler-toggle--uncollapsed:hover ~ .json2html-collapse-all-toggle,
+        .json2html-key:hover ~ .json2html-collapse-all-toggle,
+        .json2html-type__array:hover ~ .json2html-collapse-all-toggle,
+        .json2html-type__object:hover ~ .json2html-collapse-all-toggle,
+        .json2html-collapse-all-toggle:hover,
+        .json2html-uncollapse-all:hover {
+            opacity: 0.5;
+        }
+    `;
+
+    injectCSS(cssCode, '[data-style-origin="json2html-basic-style"]')
+}
+
 
 
 /**
@@ -448,7 +542,7 @@ function render(params: {
  * That means if array length > 100 - array will be grouped onto 'n' groups by 100 items.
  * @returns 
  */
-export function json2html(params: {
+export default function json2html(params: {
     json: string, 
     rootName?: string,
     renderNestedLength?: boolean, 
@@ -469,8 +563,11 @@ export function json2html(params: {
     params.collapseAll = params.collapseAll == true ? true : false;
     params.showLevel = params.showLevel || 1;
     params.showTypeOnHover = params.showTypeOnHover == false ? false : true;
-    params.groupBigArrayItemsBy = params.groupBigArrayItemsBy <= 25 ? 25 : params.groupBigArrayItemsBy || 100;
 
+    // Ensure groupBigArrayItemsBy is at least 25 and set a default value of 25 if not provided
+    params.groupBigArrayItemsBy = Math.max(params.groupBigArrayItemsBy ?? 25, 25);
+
+    injectBasicStyle();
 
     // update json2html theme at start
     useTheme(params.theme);
@@ -492,8 +589,8 @@ export function json2html(params: {
         });
         
         return rendered;
-    } catch (error) {
+    } catch (error) { 
         // Invoking params.onError for error handling 
-        params.onError(error);
+        if(params.onError) params.onError(error);
     }
 }
