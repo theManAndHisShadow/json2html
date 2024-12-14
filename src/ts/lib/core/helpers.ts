@@ -62,3 +62,29 @@ export function emulateEvent(target: Element, evenType: string){
     evObj.initEvent(evenType, true, false);
     target.dispatchEvent(evObj);
 }
+
+
+
+/**
+ * Injects css code as 'style' tag at document HEAD tag.
+ * @param cssCode - code of style
+ * @param dataMarker - data attr for other manupulations (as update code, instead duplicating)
+ */
+export function injectCSS(cssCode: string, dataMarker: string) {
+    // preparing style element
+    const style = document.createElement('style');
+
+    // parse attr name and value
+    const dataAttrName = dataMarker.split('=')[0].replace(/\[+/gm, '');
+    const dataAttrvalue = dataMarker.split('=')[1].replace(/(\]|\")+/gm, '');
+
+    // set type and data attr
+    style.type = 'text/css';
+    style.setAttribute(dataAttrName, dataAttrvalue);
+
+    // set code
+    style.innerHTML = cssCode;
+
+    // append to document head
+    document.head.appendChild(style);
+}
