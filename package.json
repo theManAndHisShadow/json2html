@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build:lib": "webpack --config webpack.lib.config.js",
-    "build:demo": "webpack --config webpack.demo.config.js",
-    "build": "npm run build:lib && npm run build:demo",
+    "build:demoapp": "webpack --config webpack.demoapp.config.js",
+    "build": "npm run build:lib && npm run build:demoapp",
     "deploy": "npm run prod && gh-pages -d dist"
   }
 }
