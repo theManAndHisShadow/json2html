@@ -1,3 +1,5 @@
+import { injectCSS } from "../core/helpers";
+
 /**
  * Return ready CSS code.
  * @param themeName name of theme
@@ -42,14 +44,7 @@ export function updateThemeCSS(cssCode: string, dataMarker: string){
         themeCSS.innerHTML = cssCode;
     } else {
         // else create and insert style tag
-        const style = document.createElement('style');
-        const dataAttrName = dataMarker.split('=')[0].replace(/\[+/gm, '');
-        const dataAttrvalue = dataMarker.split('=')[1].replace(/(\]|\")+/gm, '');
-
-        style.type = 'text/css';
-        style.setAttribute(dataAttrName, dataAttrvalue);
-        style.innerHTML = cssCode;
-        document.head.appendChild(style);
+        injectCSS(cssCode, dataMarker);
     }
 }
 
@@ -63,7 +58,7 @@ export function useTheme(themeObject: Theme){
     const cssCode = generateCSSCode(themeObject);
 
     // for saving info about source
-    const dataMarker = '[data-style-origin="json2html"]';
+    const dataMarker = '[data-style-origin="json2html-theme-style"]';
 
     updateThemeCSS(cssCode, dataMarker);
 }
