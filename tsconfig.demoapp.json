@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        // source code location
+        "rootDir": "./src/ts/demo",
+
+        // transpiled code location
+        "outDir": "./demo",
+
+
+        "noImplicitAny": true,
+        "target": "es5",
+
+        // allow mix ts/js
+        "allowJs": true,
+        "checkJs": false
+    },
+
+    // 
+    "include": ["src/ts/demo/*"],
+    "exclude": [ 
+        "node_modules", 
+        "demo", 
+        "src/ts/lib/"
+    ] 
+}

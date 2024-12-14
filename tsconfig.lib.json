@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        // source code location
+        "rootDir": "./src/ts/lib/",
+
+        // transpiled code location
+        "outDir": "./build",
+
+
+        "noImplicitAny": true,
+        "target": "es6",
+        "module": "ESNext",
+        "declaration": true,
+
+        // allow mix ts/js
+        "allowJs": true,
+        "checkJs": false,
+    },
+
+    // 
+    "include": ["src/ts/lib/*"],
+    "exclude": ["node_modules", "build",  "src/ts/lib/theming/themes" ]
+}
