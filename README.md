@@ -57,3 +57,6 @@ const display = document.querySelector('#rendered-json');
 | `theme`                  | `Theme`          | No           | N/A                       | Theme object for styling. Supports predefined themes (`andromeda`, `daylight`, `dracula`, `gruvbox-dark`, `gruvbox-light`, `github-light`, `github-dark`, `horizon`, `monokai`) or custom themes. |
 | `onError`                | `ErrorHandler`   | Yes          | `undefined`               | Callback function for handling errors. Provides access to the `Error` instance.                                                                                                  |
 | `groupBigArrayItemsBy`   | `number`         | Yes          | `100`                     | Groups large arrays into chunks of the specified size. Minimum value is `25`.                                                                                                    |
+
+# Themes
+Check out this [wiki page](https://github.com/theManAndHisShadow/json2html/wiki/Theming) to learn about the theming.  
