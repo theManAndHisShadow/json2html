@@ -1,4 +1,5 @@
 {
+  "version": "0.3",
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "gh-pages": "^5.0.0",
@@ -17,6 +18,6 @@
     "build:lib": "webpack --config webpack.lib.config.js && ./cleanup_typesDir.sh",
     "build:demoapp": "webpack --config webpack.demoapp.config.js",
     "build": "npm run build:lib && npm run build:demoapp",
-    "deploy": "npm run prod && gh-pages -d dist"
+    "deploy": "npm run build:demoapp && gh-pages -d demo"
   }
 }

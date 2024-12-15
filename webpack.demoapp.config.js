@@ -50,13 +50,5 @@ module.exports = {
                 }
             }],
         }),
-
-        new CopyWebpackPlugin({
-            patterns: [{
-                from: "../build/**/*",              // Берем всё содержимое из build, включая вложенные файлы и папки
-                to: "./js/libs/[path][name][ext]",  // Сохраняем структуру папок
-                context: "build",                   // Указывает, что "build" является корнем для пути [path]
-            }],
-        }),
     ],
 }
