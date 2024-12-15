@@ -1,8 +1,10 @@
-import { generateCSSCode, updateThemeCSS} from '../lib/ts/theming/themes';
-import getFullTheme from './theming/themes';
-import json2html from '../lib/ts/core/json2html';
+import json2html from "../ts/libs/json2html.min.js";
+
 import { importDataset } from './datasets';
-import draculaTheme from '../lib/ts/theming/themes/dracula.theme';
+import { generateCSSCode, updateThemeCSS } from "../../common/helpers";
+
+import draculaTheme from '../ts/libs/themes/dracula.theme';
+import getFullTheme from './theming/themes';
 
 
 /**
@@ -109,7 +111,7 @@ function renderText(text: string){
         showTypeOnHover: true,
         theme: draculaTheme,
         // on error show error message
-        onError: error => {
+        onError: (error: Error) => {
             toggleErrorMessage(true, error.message);
         },
     });
