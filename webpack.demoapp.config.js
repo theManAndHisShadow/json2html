@@ -1,56 +1,62 @@
 // demo app building webpack config file
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-console.log('NB: build process of demo app is broken now!');
+module.exports = {
+    entry: {
+        'app': './src/demo/ts/app.ts',
+    },
 
-// now broken
-// const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+    module: {
+        // Use `ts-loader` with special ts config to build 'lib'
+        rules: [
+            {
+                test: /\.ts$/,
+                loader: 'ts-loader',
+                options: {
+                    configFile: 'tsconfig.demoapp.json',
+                },
+            },
+        ],
+    },
 
-// module.exports = {
-//     entry: {
-//         'lib/json2html': './src/ts/lib/core/json2html.ts',
-//         'app': './src/ts/demo/app.ts',
-//     },
+    // Bundle '.ts' files as well as '.js' files.
+    resolve: {
+        extensions: ['.ts', '.js'],
+    },
 
-//     mode: 'development',
+    output: {
+        path: path.resolve(__dirname, './demo'),
+        filename: 'js/[name].js',
+    },
 
-//     module: {
-//         // Use `ts-loader` on any file that ends in '.ts'
-//         rules: [
-//             {
-//                 test: /\.ts$/,
-//                 use: 'ts-loader',
-//                 exclude: /node_modules/,
-//             },
-//         ],
-//     },
-//     // Bundle '.ts' files as well as '.js' files.
-//     resolve: {
-//         extensions: ['.ts', '.js'],
-//     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/demo/index.html',
+            minify: false,
+            inject: false,
+        }),
 
-//     output: {
-//         path: path.resolve(__dirname, './dist'),
-//         filename: 'js/[name].js',
-//     },
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: "./src/demo/css/",
+                to: "./css/",
+                globOptions: {
+                    // this line helps avoid compile final dist with samples folder
+                    ignore: [
+                        '**/css/samples/**',
+                    ]
+                }
+            }],
+        }),
 
-//     plugins: [
-//         new HtmlWebpackPlugin({
-//             template: './src/index.html',
-//             inject: false,
-//         }),
-//         new CopyWebpackPlugin({
-//             patterns: [{
-//                 from: "./src/css/",
-//                 to: "./css/",
-//                 globOptions: {
-//                     // this line helps avoid compile final dist with samples folder
-//                     ignore: [
-//                         '**/css/samples/**',
-//                     ]
-//                 }
-//             }],
-//         }),
-//     ],
-// }
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: "../build/**/*",              // Берем всё содержимое из build, включая вложенные файлы и папки
+                to: "./js/libs/[path][name][ext]",  // Сохраняем структуру папок
+                context: "build",                   // Указывает, что "build" является корнем для пути [path]
+            }],
+        }),
+    ],
+}
