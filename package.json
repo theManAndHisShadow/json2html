@@ -17,6 +17,6 @@
     "build:lib": "webpack --config webpack.lib.config.js && ./cleanup_typesDir.sh",
     "build:demoapp": "webpack --config webpack.demoapp.config.js",
     "build": "npm run build:lib && npm run build:demoapp",
-    "deploy": "npm run prod && gh-pages -d dist"
+    "deploy": "npm run prod && gh-pages -d demo"
   }
 }
