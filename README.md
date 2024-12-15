@@ -17,7 +17,7 @@ const userFromResponse =  {
     owns: [1, 2, 3, 5, 8]
 };
 
-// preparing to render
+// preparing object before rendering
 const jsonString = JSON.stringify(userFromResponse);
 
 // render using 'json2html' lib function
@@ -31,7 +31,9 @@ const renedered = json2html({
     },
 });
 
-// append rendered josn/object to target element at HTML
+// append rendered json/object to target element at HTML
 const display = document.querySelector('#rendered-json');
       display.appendChild(renedered);
+
+// Now an interactive block with the transferred json structure will appear in the target element
 ```
