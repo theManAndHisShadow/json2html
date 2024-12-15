@@ -1,3 +1,19 @@
+declare type Theme = {
+    [key: string]: {                     // HTML element key name, for example: 'spoilerToggle'
+        selector: string,                // HTML element selector, for example '.json2html-spoiler-toggle--collapsed, .json2html-spoiler-toggle--uncollapsed'
+        properties: {                    // CSS properties, for example: 'color', 'background',
+            [key: string]: string,
+        },
+    },
+};
+
+declare type ThemeLibrary = {
+    [key: string]: {
+        app: Theme,                     // Theme for whole app (optional)
+        renderedJSON: Theme,            // Theme for rendered JSON 
+    }
+};
+
 /**
  * Renders JSON string in colored and formatted HTML block.
  * @param params.json JSON string to render
