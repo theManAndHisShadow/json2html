@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         // source code location
-        "rootDir": "./src/demo/ts/",
+        "rootDir": "./src",
 
         // transpiled code location
         "outDir": "./demo",
@@ -12,14 +12,15 @@
 
         // allow mix ts/js
         "allowJs": true,
-        "checkJs": false
+        "checkJs": false,
     },
 
     // 
-    "include": ["src/demo/ts/*"],
+    "include": ["src/demo/ts/*", "src/types.d.ts"],
     "exclude": [ 
         "node_modules", 
         "demo", 
-        "src/lib/ts/"
+        "src/lib/ts/",
+        "src/demo/ts/theming/"
     ] 
 }
