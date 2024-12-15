@@ -1,5 +1,4 @@
-import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent, injectCSS} from './helpers';
-import { useTheme } from '../theming/themes';
+import { isLink, isArray, isObject, addMultipleEventHandlers, emulateEvent, injectCSS, useTheme } from '../../../common/helpers';
 
 
 /**
