@@ -492,7 +492,7 @@ function injectBasicStyle(){
 
         .json2html-collapse-all-toggle {
             opacity: 0;
-            position: relative;
+            position: relative;©
             padding-left: 10px;
             transition: 0.3s ease;
         }
@@ -566,7 +566,10 @@ export default function json2html(params: {
     // Ensure groupBigArrayItemsBy is at least 25 and set a default value of 25 if not provided
     params.groupBigArrayItemsBy = Math.max(params.groupBigArrayItemsBy ?? 25, 25);
 
-    injectBasicStyle();
+    // add only once
+    if(!document.querySelector('[data-style-origin="json2html-basic-style"]')) { 
+        injectBasicStyle();
+    }
 
     // update json2html theme at start
     useTheme(params.theme);
