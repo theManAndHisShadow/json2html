@@ -1,3 +1,5 @@
+Link to online-demo: https://themanandhisshadow.github.io/json2html/
+
 # About
 JSON formatter written in TypeScript.
 The `json2html` function transforms a JSON string into a structured, interactive, and visually styled HTML block. This is particularly useful for visualizing complex JSON data in a clear and user-friendly way. It enables developers to explore nested structures with collapsible nodes, making it easier to inspect data without manually formatting or analyzing raw JSON.
